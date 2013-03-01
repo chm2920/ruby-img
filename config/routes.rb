@@ -1,5 +1,7 @@
 RubyImg::Application.routes.draw do
   
+  match "upload" => "start#upload"
+  
     
   match "admin" => "account#login"
   get "account/main"

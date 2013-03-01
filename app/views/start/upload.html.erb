@@ -1,0 +1,45 @@
+<div class="preview">
+	<div class="preview-a">
+		<img src="<%= @image.rel_path %>" />
+	</div>
+	<div class="preview-b">
+		<img src="<%= @image.rel_path_b %>" />
+	</div>
+</div>
+<div class="imginfo">
+	<p>Format: <%= @img.format %></p>
+	<p>Geometry: <%= @img.columns %>x<%= @img.rows %></p>
+	<p>Class: 
+	<%
+		case @img.class_type
+		when Magick::DirectClass
+	%>
+			"DirectClass"
+	<%
+		when Magick::PseudoClass
+	%>
+			"PseudoClass"
+	<%
+		end
+	%>
+	</p>
+	<p>Depth: <%= @img.depth %> bits-per-pixel</p>
+	<p>Colors: <%= @img.number_colors %></p>
+	<p>Filesize: <%= @img.filesize %></p>
+	<p>Resolution: <%= @img.x_resolution.to_i %>x<%= @img.y_resolution.to_i %>pixels/
+		<%= @img.units == Magick::PixelsPerInchResolution ? "inch" : "centimeter" %>
+	</p>
+	<%
+	    if @img.properties.length > 0
+	%>
+	        "   Properties:" <br /><br />
+	<%
+	        @img.properties { |name,value|
+	%>
+	            <%= name %> = <%= value %> <br />
+	<%
+	        }
+	    end
+	%>
+</div>
+<%= @test %>

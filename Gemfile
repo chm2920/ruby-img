@@ -6,4 +6,4 @@ gem 'sqlite3'
 gem 'will_paginate'
 
 gem 'kindeditor'
-gem 'paperclip'
+gem 'rmagick'

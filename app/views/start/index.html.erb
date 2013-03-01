@@ -1,1 +1,6 @@
-test
+<div class="uploadform">
+	<%= form_tag('/upload', :multipart => true) do -%>
+	<input type="file" name="imgfile" class="fileselect" />
+	<input type="submit" name="submit" class="fileupload" value="上传" />
+	<% end -%>
+</div>

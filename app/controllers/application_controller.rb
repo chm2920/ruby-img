@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     rescue_from ActionController::UnknownController,  :with => :render_not_found
     rescue_from ActionController::UnknownAction,      :with => :render_not_found
   end
-  rescue_errors
+  #rescue_errors
   
   def render_not_found(exception=nil)
     record_error(params[:path])

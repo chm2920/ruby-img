@@ -38,7 +38,21 @@ input, option, select, textarea, button {font-size: 12px;}
 .nav li .subnav a{height:32px;line-height:32px;color:#000;}
 .nav li .subnav a:hover{background:#FFCD40;}
 
-#PageBody{height:400px;}
+#PageBody{}
 
 #Footer{border-top:1px solid #CCC;}
 .foot{padding:20px 0;}
+
+.uploadform{margin:80px 0;text-align:center;}
+.fileselect{display:inline-block;width:200px;height:200px;}
+.fileupload{display:inline-block;width:200px;height:200px;}
+
+.preview{margin:10px 0;}
+.preview img{max-width:490px;}
+.preview-a, .preview-b{display:inline;width:490px;}
+.preview-a{float:left;}
+.preview-b{float:right;}
+
+.imginfo{clear:both;padding:20px;line-height:28px;font-size:14px;}
+
+
