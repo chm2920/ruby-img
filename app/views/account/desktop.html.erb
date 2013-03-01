@@ -1,0 +1,167 @@
+<style>
+.calendar{margin:0 auto;width:300px;}
+.datepicker-box{border: 1px solid #d9d9d9;}
+.datepicker-header{background: #F8F8F8;border-bottom: 1px solid #EEE;}
+.datepicker-header span{text-align:center;padding: 14px 15px 10px;cursor:pointer;}
+.datepicker-header span b{display: block;width: 0;height: 0;font-size: 0;border: 8px solid #F8F8F8;}
+.datepicker-pre{float: left;}
+.datepicker-next{float: right;}
+.datepicker-header span.datepicker-pre b{border-left: 0;border-right: 8px solid #444;}
+.datepicker-header span.datepicker-next b{border-right: 0;border-left: 8px solid #444;}
+.datepicker-header h4{margin:0 auto;padding: 12px 0;width:160px;height: 20px;line-height: 20px;text-align: center;font-size: 16px;font-weight: normal;}
+.datepicker-body{width: 100%;border: 0;border-collapse: collapse;border-spacing: 0;}
+.datepicker-body th, .datepicker-body td{height:30px;line-height:30px;text-align: center;font-size: 14px;}
+.datepicker-body th.datepicker-weekend, .datepicker-body td.datepicker-weekend{color: #DD4B39;}
+.datepicker-body td.datepicker-disabled{color: #AAA;}
+.datepicker-body th{padding: 6px 0;font-weight: normal;color: #333;}
+.datepicker-body td{padding: 4px 0;}
+.datepicker-body td.cur{background: #82C7E9;font-weight: bold;color: #FFF;}
+</style>
+<div class="calendar" id="calendar">
+</div>
+
+
+<script type="text/javascript" src="/assets/jquery-1.8.3.min.js"></script>
+<script>
+var calendar = {
+	show: function(){
+        this._picker = $('#calendar');
+        this._date = new Date();
+        
+		var arr = [];
+        arr.push('<div class="datepicker-box">');
+        arr.push('	<div class="datepicker-header">');
+        arr.push('		<span class="datepicker-pre"><b></b></span>');
+        arr.push('		<span class="datepicker-next"><b></b></span>');
+        arr.push("		<h4></h4>");
+        arr.push("	</div>");
+        arr.push('	<table class="datepicker-body">');
+        arr.push("		<thead>");
+        arr.push("			<tr>");
+        arr.push('				<th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th class="datepicker-weekend">六</th><th class="datepicker-weekend">日</th>');
+        arr.push("			</tr>");
+        arr.push("		</thead>");
+        arr.push("		<tbody>");
+        arr.push("		</tbody>");
+        arr.push("	</table>");
+        arr.push("</div>");
+        this._picker.html(arr.join(''));
+        
+        this._generateDays();
+        
+        this._picker.find("span.datepicker-pre").hide();
+        
+        var self = this;
+        this._picker.find("span").click(function () {
+            if ($(this).hasClass("datepicker-pre")) {
+                self._date.setMonth(self._date.getMonth() - 1)
+            } else {
+                self._date.setMonth(self._date.getMonth() + 1)
+            }
+            var today = new Date();
+            if (self._date.getMonth() == today.getMonth() && self._date.getFullYear() == today.getFullYear()) {
+                self._picker.find("span.datepicker-pre").hide()
+            } else {
+                self._picker.find("span.datepicker-pre").show()
+            }
+            self._generateDays();
+        });
+        this._picker.find("h4").click(function(){
+        	self._date = new Date();
+        	self._picker.find("span.datepicker-pre").hide();
+        	self._generateDays();
+        });
+    },
+    _generateDays: function () {
+        var r = this._date.getFullYear(),
+            o = this._date.getMonth() + 1,
+            t = this._date.getDate(),
+            w = new Date(new Date(r, o, 1) - 24 * 60 * 60 * 1000).getDate(),
+            f = (function () {
+                var d = new Date(r, o - 1, 1);
+                var i = d.getDay();
+                if (i == 0) {
+                    i = 7
+                }
+                return i
+            })(),
+            s = new Date(),
+            v = s.getFullYear(),
+            m = s.getMonth() + 1,
+            u = s.getDate();
+        this._picker.find("h4").html(r + " 年 " + o + " 月");
+        var n = [],
+            q = 1;
+        n.push("<tr>");
+        for (var h = 1; h < f; h++) {
+            n.push("<td>&nbsp;</td>")
+        }
+        for (var h = f; h < 8; h++, q++) {
+            n.push('<td class="');
+            if (v == r && m == o && q < u) {
+                n.push("datepicker-disabled")
+            } else {
+                n.push("datepicker-td");
+                if (q == t) {
+                    n.push(" cur")
+                }
+                if (h >= 6) {
+                    n.push(" datepicker-weekend")
+                }
+            }
+            n.push('">');
+            n.push(q);
+            n.push("</td>")
+        }
+        n.push("</tr>");
+        for (var k = 0, g = Math.ceil((w + f) / 7) - 2; k < g; k++) {
+            n.push("<tr>");
+            for (var h = 1; h < 8; h++, q++) {
+                n.push('<td class="');
+                if (v == r && m == o && q < u) {
+                    n.push("datepicker-disabled")
+                } else {
+                    n.push("datepicker-td");
+                    if (q == t) {
+                        n.push(" cur")
+                    }
+                    if (h >= 6) {
+                        n.push(" datepicker-weekend")
+                    }
+                }
+                n.push('">');
+                n.push(q);
+                n.push("</td>")
+            }
+            n.push("</tr>")
+        }
+        var g = w - q + 1;
+        if (g != 0) {
+            n.push("<tr>");
+            for (var k = 0; k < g; k++, q++) {
+                n.push('<td class="');
+                if (v == r && m == o && q < u) {
+                    n.push("datepicker-disabled")
+                } else {
+                    n.push("datepicker-td");
+                    if (q == t) {
+                        n.push(" cur")
+                    }
+                    if (k >= 6) {
+                        n.push(" datepicker-weekend")
+                    }
+                }
+                n.push('">');
+                n.push(q);
+                n.push("</td>")
+            }
+            for (var k = g + 1; k < 8; k++) {
+                n.push("<td>&nbsp;</td>")
+            }
+            n.push("</tr>")
+        }
+        this._picker.find("tbody")[0].innerHTML = n.join("");
+    }
+};
+calendar.show();   
+</script>

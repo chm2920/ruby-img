@@ -1,0 +1,32 @@
+	<tbody>
+		<tr>
+			<td colspan="2" class="blank"></td>
+		</tr>
+		<tr>
+			<td class="data_label">名称：</td>
+			<td class="data_ipt">
+				<%= f.text_field :adminname %>
+			</td>
+		</tr>
+		<tr>
+			<td class="data_label">密码：</td>
+			<td class="data_ipt">
+				<%= f.password_field :password %>
+			</td>
+		</tr>
+		<tr>
+			<td class="data_label">确认密码：</td>
+			<td class="data_ipt">
+				<input type="password" value="" name="admin[password_confirm]" id="admin_password_confirm" />
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td class="data_sbt">
+				<input type="submit" name="submit" value="提交" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="blank"></td>
+		</tr>
+	</tbody>

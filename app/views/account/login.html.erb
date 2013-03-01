@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 transitional//EN" "http://www.w3.org/tr/xhtml1/Dtd/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>管理登录</title>
+	<style>
+	body, form{margin: 0;padding: 0;}
+	body{background: #f9f8f8;font-size: 12px;font-family: Microsoft Yahei, simsun;color: #000;}
+	form{border: 1px solid #f9f8f8;}
+	
+	.loginTitle{padding:0 0 0 75px;width:378px;height:59px;background:url(/assets/admin/login-header.gif);font-size:14px;font-weight:bold;color:#FFF;}
+	table.FrontScreen {border:1px solid #d0d0d0;}
+	table.FrontScreen td.title {font-weight:bold;color:#999;}
+	
+	input.Flatinput{padding:2px 4px;width:150px;border:1px solid #7f9db9;background:#ffffff;}
+	
+	.FormButton{width:93px;}
+	.FormButton .buttonCenter input{width:100%;height:21px;background: url(/assets/admin/btn_bg_login.gif) no-repeat;border:0;}
+	</style>
+</head>
+<body>
+<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+<%= form_tag '/admin_login_rst' do %>
+<table cellSpacing="0" cellPadding="0" align="center" border="0">
+<tbody>
+	<tr>
+		<td class="loginTitle" colSpan="2">管理登录</td>
+	</tr>
+	<tr>
+		<td>
+		<table class="FrontScreen" cellSpacing="0" cellPadding="3" width="100%" border="0">
+			<tbody>
+				<tr>
+					<td align="middle" colSpan="3"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td align="middle" colSpan="2"><% if @err_msg %><font style="color:#FF0000;"><%= @err_msg %></font><% else %>请输入您的登录信息<% end %></td>
+				</tr>
+				<tr>
+					<td align="middle" colSpan="3"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="title" width="50%">帐&nbsp;&nbsp;号</td>
+					<td align="left" width="50%">
+						<input id="name" name="name" type="text" class="Flatinput" />
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="title" width="50%">密&nbsp;&nbsp;码</td>
+					<td align="left" width="50%">
+						<input id="password" name="password" type="password" class="Flatinput" />
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="padding:7px 7px 7px 0;" colSpan="2">
+					<table width="100%" border="0">
+						<tbody>
+							<tr>
+								<td align="left" width="100%"><A href="#"></A>&nbsp; </td>
+								<td></td>
+								<td>
+								<table class="FormButton" cellSpacing="0" cellPadding="0" border="0">
+									<tbody>
+										<tr>
+											<td class="buttonLeft"></td>
+											<td class="buttonCenter">
+												<input type="submit" value="登录" name="doLogin">
+											</td>
+											<td class="buttonRight"></td>
+										</tr>
+									</tbody>
+								</table></td>
+							</tr>
+						</tbody>
+					</table></td>
+				</tr>
+			</tbody>
+		</table></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td align="right" style="color:#999;">&copy; 2013 All rights reserved</td>
+	</tr>
+</tbody>
+</table>
+<% end %>
+</body>
+</html>

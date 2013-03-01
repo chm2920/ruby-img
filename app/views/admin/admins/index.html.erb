@@ -1,0 +1,43 @@
+<table class="stdtable">
+	<colgroup>
+		<col style="width: 60%" />
+		<col style="width: 20%" />
+		<col style="width: 20%" />
+	</colgroup>
+	<thead>
+		<tr>
+			<th>名称</th>
+			<th>创建时间</th>
+			<th>管理</th>
+		</tr>
+	</thead>
+	<%
+		if @admins.length > 0
+	%>
+	<tbody>
+	<%
+			@admins.each do |admin|
+	%>
+		<tr>
+			<td><%= admin.adminname %></td>
+			<td><%= admin.created_at.strftime("%Y-%m-%d") %></td>
+			<td>
+				<a href="/admin/admins/<%= admin.id %>/edit">修改</a>|<%= link_to "删除", {:action => "destroy", :id => admin}, :confirm => "确定删除？", :method => "delete" %>
+			</td>
+		</tr>
+	<%
+			end
+	%>
+	</tbody>
+	<%
+		else
+	%>
+	<tbody>
+		<tr>
+			<td colspan="3" style="text-align:left;">&nbsp;还没有内容。</td>
+		</tr>
+	</tbody>
+	<%
+		end
+	%>
+</table>

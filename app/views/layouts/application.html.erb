@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ruby Img</title>
+  <%= stylesheet_link_tag    "main" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div id="Container">
+	<div id="Header" class="wapper">
+		<div class="logo">Ruby Img</div>
+	</div>
+	<div id="Nav">
+		<ul class="nav wapper clearfix">
+			<li class="first">
+				<a href="/">首页</a>
+			</li>
+			<li>
+				<a href="/">关于</a>
+			</li>
+		</ul>
+	</div>
+	<div id="PageBody" class="wapper">
+<%= yield %>
+	</div>
+	<div id="Footer">
+		<div class="foot wapper clearfix">
+			<div class="l">Ruby Img</div>
+			<div class="r">Copyright(c)2013 Ruby Img All Rights Reserved</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
