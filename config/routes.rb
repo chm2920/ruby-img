@@ -1,5 +1,7 @@
 RubyImg::Application.routes.draw do
   
+  match "sample" => "start#sample"
+  match "about" => "start#about"
   match "upload" => "start#upload"
   
     

@@ -1,10 +1,12 @@
 require 'RMagick'
 class Image
   
-  attr :obj, :bits, :path, :path_b, :rel_path, :rel_path_b, :weights
+  attr :obj, :bits, :path, :path_b, :rel_path, :rel_path_b, :rel_path_c, :weights
   
-  def initialize(data)
+  def initialize(data, width, height)
     @bits = data
+    @width = width
+    @height = height
   end
 
   def save
@@ -17,20 +19,29 @@ class Image
     
     @path = File.join("#{Rails.root}/public", upload_path + 'a' + extName)
     @path_b = File.join("#{Rails.root}/public", upload_path + 'b' + extName)
+    @path_c = File.join("#{Rails.root}/public", upload_path + 'c' + extName)
     
     @rel_path = File.join(upload_path + 'a' + extName)
     @rel_path_b = File.join(upload_path + 'b' + extName)
+    @rel_path_c = File.join(upload_path + 'c' + extName)
     
     File.open(@path, "wb") { |file|
       file.write(@bits.read)
     }
+    
+    render_c
     
     render_b
     
     @obj
   end
   
-  def render_b    
+  def render_b
+    chopped = @obj.crop(23, 81, 107, 139)
+    @obj.write(@rel_path_c)
+  end
+  
+  def render_c    
     @obj = Magick::Image.read(@path).first
     @obj.pixel_color(0, 0, "white")
     
@@ -45,7 +56,7 @@ class Image
     
     @max = cal_max_lu
     
-    img_b = Magick::Image.new(w, h, Magick::HatchFill.new('white', 'black', a))
+    img_c = Magick::Image.new(w, h, Magick::HatchFill.new('white', 'black', a))
     
     @weights = []
     0.upto q-1 do |y|
@@ -63,12 +74,12 @@ class Image
           midy = sy + b/2
           rdx = sx + (a/2 * weight) / 10
           
-          Magick::Draw.new.circle(midx, midy, rdx, midy).draw(img_b)
+          Magick::Draw.new.circle(midx, midy, rdx, midy).draw(img_c)
         end
       end
     end
     
-    img_b.write(@path_b)
+    img_c.write(@path_c)
   end
   
   def cal_lu(p_color)

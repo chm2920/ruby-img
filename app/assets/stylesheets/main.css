@@ -43,15 +43,18 @@ input, option, select, textarea, button {font-size: 12px;}
 #Footer{border-top:1px solid #CCC;}
 .foot{padding:20px 0;}
 
-.uploadform{margin:80px 0;text-align:center;}
-.fileselect{display:inline-block;width:200px;height:200px;}
-.fileupload{display:inline-block;width:200px;height:200px;}
+.uploadform{margin:100px 0;text-align:center;}
+.uploadform table{margin:0 auto;width:800px;}
+.uploadform td{padding:20px 0;text-align:center;}
+.uploadform td.tdl{text-align:left;}
+.uploadform td.tdl input{margin:0 4px 0 10px;}
+.uploadform input{line-height:20px;}
+.minInput{padding:4px 0;width:40px;text-align:center;}
+.fileupload{margin:40px 0;padding:8px 40px;}
 
-.preview{margin:10px 0;}
-.preview img{max-width:490px;}
-.preview-a, .preview-b{display:inline;width:490px;}
-.preview-a{float:left;}
-.preview-b{float:right;}
+.preview{display:table;margin:10px 0;}
+.preview img{max-width:333px;}
+.preview-a, .preview-b, .preview-c{display:table-cell;width:333px;}
 
 .imginfo{clear:both;padding:20px;line-height:28px;font-size:14px;}
 

@@ -4,9 +4,12 @@ class StartController < ApplicationController
   end
   
   def upload
-    @image = Image.new(params[:imgfile])
+    @image = Image.new(params[:imgfile], params[:width], params[:height])
     @img = @image.save
-    @test = @img.pixel_color(0, 0)
+  end
+  
+  def sample
+    
   end
   
 end
