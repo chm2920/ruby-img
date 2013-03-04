@@ -9,6 +9,7 @@ class Rimage
     @bits = data
     @width = width.to_i
     @height = height.to_i
+    @scale = 10
   end
 
   def save
@@ -46,7 +47,7 @@ class Rimage
   def render_b    
     @chopped = Magick::Image.read(@path).first
     #@obj = @obj.scale(400, 300)
-    @chopped = @chopped.crop(CenterGravity, 400, 300)
+    @chopped = @chopped.crop(CenterGravity, @width * @scale, @height * @scale)
     #chopped = @obj.crop(23, 81, 107, 139)
     @chopped.write(@path_b)
   end
@@ -108,8 +109,20 @@ class Rimage
         i = i + 1
         img = Magick::Image.new(per * 10, per * 10, Magick::HatchFill.new('white', 'black', per))
         
-        #@weights[y][x]
-        text.annotate(img, per, per, 50, 0, '10')
+        sx = x * @scale
+        sy = y * @scale
+        ex = (x + 1) * @scale
+        ey = (y + 1) * @scale
+        
+        n = 0
+        sy.upto ey-1 do |yy|
+          m = 0
+          sx.upto ex-1 do |xx|
+            text.annotate(img, per, per, m * per, n * per, @weights[yy][xx].to_s)
+            m = m + 1
+          end
+          n = n + 1
+        end        
         
         path = File.join(@path_m, 'M' + i.to_s + '.jpg')
         img.write(path)
