@@ -11,11 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130301112847) do
+ActiveRecord::Schema.define(:version => 20130304140743) do
 
   create_table "admins", :force => true do |t|
     t.string   "adminname"
     t.string   "password"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "rimages", :force => true do |t|
+    t.string   "path"
+    t.string   "extName"
+    t.integer  "scale"
+    t.integer  "width"
+    t.integer  "height"
+    t.string   "total"
+    t.integer  "state"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

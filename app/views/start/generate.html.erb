@@ -1,0 +1,41 @@
+<div class="preview">
+	<div class="preview-a">
+		<a href="<%= @image.rel_path %>" target="_blank"><img src="<%= @image.rel_path %>" /></a>
+	</div>
+	<div class="preview-b">
+		<a href="<%= @image.rel_path_b %>" target="_blank"><img src="<%= @image.rel_path_b %>" /></a>
+	</div>
+	<div class="preview-c">
+		<a href="<%= @image.rel_path_c %>" target="_blank"><img src="<%= @image.rel_path_c %>" /></a>
+	</div>
+</div>
+<table class="ms">
+	<% i = 0 %>
+	<% w = 1000/@image.w %>
+	<% 0.upto @image.h - 1 do %>
+	<tr>
+		<% 0.upto @image.w - 1 do %>
+		<% i = i + 1 %>
+		<% imgPath = @image.rel_path_m + 'M' + i.to_s + '.jpg' %>
+		<td>
+			<a href="<%= imgPath %>" target="_blank"><img src="<%= imgPath %>" style="width:<%= w %>px" /></a>
+			<p>M<%= i.to_s %></p>
+		</td>
+		<% end %>
+	</tr>
+	<% end %>
+</table>
+<table class="total">
+	<% total = @image.total.split('$').map{|i|i.to_i} %>
+	<tr>
+		<td>规格</td>
+		<td>个数</td>
+		<td rowspan="11">共 <%= total.sum %></td>
+	</tr>
+	<% 1.upto total.length - 1 do |i| %>
+	<tr>
+		<td><%= i %></td>
+		<td><%= total[i] %></td>
+	</tr>
+	<% end %>
+</table>

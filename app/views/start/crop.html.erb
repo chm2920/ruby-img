@@ -1,0 +1,9 @@
+<div class="crop">	
+	<%= form_tag('/generate') do -%>
+	<div class="crop-box">
+		<div id="mask" class="mask"></div>
+		<img src="<%= @image.rel_path %>" />
+	</div>
+	<input type="submit" name="submit" class="fileupload" value="完成" />
+	<% end -%>
+</div>
