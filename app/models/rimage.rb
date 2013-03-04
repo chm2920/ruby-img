@@ -3,13 +3,14 @@ include Magick
 
 class Rimage
   
-  attr :rel_path, :rel_path_b, :rel_path_c, :rel_path_m, :weights, :w, :h
+  attr :rel_path, :rel_path_b, :rel_path_c, :rel_path_m, :weights, :w, :h, :total
   
   def initialize(data, width, height)
     @bits = data
     @width = width.to_i
     @height = height.to_i
     @scale = 10
+    @total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   end
 
   def save
@@ -78,7 +79,7 @@ class Rimage
         ey = b * (y + 1)
         weight = cal_weight(sx, sy, ex, ey)        
         
-        @weights[y][x] = 10 -weight
+        @weights[y][x] = 10 - weight
         midx = sx + a/2
         midy = sy + b/2
         rdx = sx + (a/2 * weight) / 10
@@ -118,7 +119,9 @@ class Rimage
         sy.upto ey-1 do |yy|
           m = 0
           sx.upto ex-1 do |xx|
-            text.annotate(img, per, per, m * per, n * per, @weights[yy][xx].to_s)
+            weight = @weights[yy][xx]
+            @total[weight] = @total[weight] + 1
+            text.annotate(img, per, per, m * per, n * per, weight.to_s)
             m = m + 1
           end
           n = n + 1

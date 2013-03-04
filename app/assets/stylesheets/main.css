@@ -59,6 +59,9 @@ input, option, select, textarea, button {font-size: 12px;}
 .ms{width:1000px;border-spacing:0;border-collapse:collapse;}
 .ms td{padding:10px 0;text-align:center;}
 
+.total{margin:10px 0;width:1000px;border-spacing:0;border-collapse:collapse;}
+.total td{padding:10px 0;text-align:center;border:1px solid #CCC;}
+
 .imginfo{clear:both;padding:20px;line-height:28px;font-size:14px;}
 
 

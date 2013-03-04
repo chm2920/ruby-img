@@ -1,12 +1,12 @@
 <div class="preview">
 	<div class="preview-a">
-		<img src="<%= @image.rel_path %>" />
+		<a href="<%= @image.rel_path %>" target="_blank"><img src="<%= @image.rel_path %>" /></a>
 	</div>
 	<div class="preview-b">
-		<img src="<%= @image.rel_path_b %>" />
+		<a href="<%= @image.rel_path_b %>" target="_blank"><img src="<%= @image.rel_path_b %>" /></a>
 	</div>
 	<div class="preview-c">
-		<img src="<%= @image.rel_path_c %>" />
+		<a href="<%= @image.rel_path_c %>" target="_blank"><img src="<%= @image.rel_path_c %>" /></a>
 	</div>
 </div>
 <table class="ms">
@@ -16,8 +16,9 @@
 	<tr>
 		<% 0.upto @image.w - 1 do %>
 		<% i = i + 1 %>
+		<% imgPath = @image.rel_path_m + 'M' + i.to_s + '.jpg' %>
 		<td>
-			<img src="<%= @image.rel_path_m + 'M' + i.to_s + '.jpg' %>" style="width:<%= w %>px" />
+			<a href="<%= imgPath %>" target="_blank"><img src="<%= imgPath %>" style="width:<%= w %>px" /></a>
 			<p>M<%= i.to_s %></p>
 		</td>
 		<% end %>
@@ -60,3 +61,16 @@
 	    end
 	%>
 </div>
+<table class="total">
+	<tr>
+		<td>规格</td>
+		<td>个数</td>
+		<td rowspan="11">共 <%= @image.total.sum %></td>
+	</tr>
+	<% 1.upto @image.total.length - 1 do |i| %>
+	<tr>
+		<td><%= i %></td>
+		<td><%= @image.total[i] %></td>
+	</tr>
+	<% end %>
+</table>
