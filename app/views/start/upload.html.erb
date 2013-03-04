@@ -9,10 +9,22 @@
 		<img src="<%= @image.rel_path_c %>" />
 	</div>
 </div>
-<div class="weights">
-	<%= @image.weights %>
-</div>
-<div class="imginfo">
+<table class="ms">
+	<% i = 0 %>
+	<% w = 1000/@image.w %>
+	<% 0.upto @image.h - 1 do %>
+	<tr>
+		<% 0.upto @image.w - 1 do %>
+		<% i = i + 1 %>
+		<td>
+			<img src="<%= @image.rel_path_m + 'M' + i.to_s + '.jpg' %>" style="width:<%= w %>px" />
+			<p>M<%= i.to_s %></p>
+		</td>
+		<% end %>
+	</tr>
+	<% end %>
+</table>
+<div class="imginfo" style="display:none;">
 	<p>Format: <%= @img.format %></p>
 	<p>Geometry: <%= @img.columns %>x<%= @img.rows %></p>
 	<p>Class: 

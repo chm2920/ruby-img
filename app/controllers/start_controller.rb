@@ -4,7 +4,7 @@ class StartController < ApplicationController
   end
   
   def upload
-    @image = Image.new(params[:imgfile], params[:width], params[:height])
+    @image = Rimage.new(params[:imgfile], params[:width], params[:height])
     @img = @image.save
   end
   
