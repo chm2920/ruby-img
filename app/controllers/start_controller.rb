@@ -4,7 +4,7 @@ class StartController < ApplicationController
   end
   
   def upload
-    @image = Rimage.upload(params[:imgfile], params[:width], params[:height])
+    @image = Rimage.upload(params[:imgfile])
     if @image && @image != 400 && @image != 500
       session[:image_id] = @image.id
       redirect_to "/crop"
@@ -17,7 +17,7 @@ class StartController < ApplicationController
   
   def generate
     @image = Rimage.find(session[:image_id])
-    @image.generate!
+    @image.generate!(params[:width], params[:height], params[:scale])
   end
   
   def generate_m

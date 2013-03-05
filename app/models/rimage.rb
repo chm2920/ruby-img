@@ -5,6 +5,8 @@ class Rimage < ActiveRecord::Base
   
   attr_accessible :path, :extName, :width, :height, :scale, :weights, :total, :state
   
+  before_destroy :remove_file
+  
   def upload_path
     File.join("#{Rails.root}/public", self.path)
   end
@@ -50,7 +52,7 @@ class Rimage < ActiveRecord::Base
   end
   
   
-  def self.upload(data, width, height)
+  def self.upload(data)
     begin
       origName = data.original_filename
       baseName = File.basename(origName, ".*")
@@ -68,9 +70,11 @@ class Rimage < ActiveRecord::Base
           file.write(data.read)
         }
         
-        rimage.scale = 10
-        rimage.width = width.to_i
-        rimage.height = height.to_i
+        img = Magick::Image.read(rimage.full_path).first
+        
+        rimage.scale = 4
+        rimage.width = img.columns
+        rimage.height = img.rows
         rimage.weights = []
         rimage.total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].join('$')
         rimage.state = 1
@@ -89,7 +93,11 @@ class Rimage < ActiveRecord::Base
     end
   end
   
-  def generate!
+  def generate!(width, height, scale)
+    self.width = width.to_i
+    self.height = height.to_i
+    self.scale = scale.to_i
+    
     img = Magick::Image.read(self.full_path).first
     #@obj = @obj.scale(400, 300)
     img = img.crop(CenterGravity, self.width * self.scale, self.height * self.scale)
@@ -129,6 +137,7 @@ class Rimage < ActiveRecord::Base
     img_c.write(self.full_path_c)
     
     self.weights = weights.map{|t|t.join('$')}.join('#')
+    self.state = 2
     self.save
   end
   
@@ -148,7 +157,7 @@ class Rimage < ActiveRecord::Base
     0.upto self.h - 1 do |y|
       0.upto self.w - 1 do |x|
         i = i + 1
-        img = Magick::Image.new(per * 10, per * 10, Magick::HatchFill.new('white', 'black', per))
+        img = Magick::Image.new(per * self.scale, per * self.scale, Magick::HatchFill.new('white', 'black', per))
         
         sx = x * self.scale
         sy = y * self.scale
@@ -172,6 +181,7 @@ class Rimage < ActiveRecord::Base
       end
     end
     self.total = total.join('$')
+    self.state = 200
     self.save
   end
   
@@ -188,10 +198,14 @@ class Rimage < ActiveRecord::Base
         sum =+ (lu * 10 / 65535).to_i
       end
     end
-    if sum == 1
-      sum = 2
+    if sum == 9
+      sum = 8
     end
     sum
+  end
+  
+  def remove_file
+    puts 'remove file'
   end
   
 end

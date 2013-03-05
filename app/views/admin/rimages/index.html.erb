@@ -1,0 +1,69 @@
+<%= form_tag({:action => "index"}, {:id => "vbform"}) do %>	
+<table class="stdtable">
+	<thead>
+		<tr>
+			<th width="5%">ID</th>
+			<th>path</th>
+			<th width="5%">scale</th>
+			<th width="5%">width</th>
+			<th width="5%">height</th>
+			<th>total</th>
+			<th width="5%">state</th>
+			<th width="10%">时间</th>
+			<th width="10%">管理</th>
+		</tr>
+	</thead>
+	<%
+		if @rimages.length>0
+	%>
+	<tbody>
+	<%
+			@rimages.each do |rimage|
+	%>
+		<tr>
+			<td><%= check_box_tag 'rimage_ids[]', rimage.id, false, :class => 'checker' %></td>
+			<td><%= rimage.path %></td>
+			<td><%= rimage.scale %></td>
+			<td><%= rimage.width %></td>
+			<td><%= rimage.height %></td>
+			<td><% arr = rimage.total.split('$') %>
+			<%= arr.join('+') %>=<%= arr.map{|t|t.to_i}.sum %></td>
+			<td><%= rimage.state %></td>
+			<td><%= rimage.created_at.strftime("%Y-%m-%d") %></td>
+			<td>
+				<%= link_to "删除", {:action => "destroy", :id => rimage}, :confirm => "确定删除？", :method => "delete" %>
+			</td>
+		</tr>
+	<%
+			end
+	%>
+	</tbody>
+	<%
+		else
+	%>
+	<tbody>
+		<tr>
+			<td colspan="9" style="text-align:left;">&nbsp;还没有内容。</td>
+		</tr>
+	</tbody>
+	<%
+		end
+	%>
+</table>
+<div class="list-opts clearfix">
+	<div class="l">
+		<input type="button" name="selectAll" id="selectAll" value="全选">
+		<input type="button" name="selectOther" id="selectOther" value="反选">
+		<input type="submit" name="delete_all" id="delete_all" value="全部删除">
+		<input type="button" name="clear_all" id="clear_all" value="清空">
+	</div>
+	<%= will_paginate @rimages %>
+</div>
+<% end %>
+<script>	
+$('#clear_all').click(function(e){
+	e.preventDefault();
+	e.stopPropagation();
+	location.href = "/admin/rimages/clear";
+});
+</script>

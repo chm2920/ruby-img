@@ -17,6 +17,11 @@ RubyImg::Application.routes.draw do
   
   namespace :admin do
     
+    get "rimages/index"
+    post "rimages/index"
+    get "rimages/clear"
+    resources :rimages
+    
     get "run_logs/index"
     post "run_logs/index"
     get "run_logs/clear"
