@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20130304140743) do
     t.integer  "scale"
     t.integer  "width"
     t.integer  "height"
+    t.text     "weights"
     t.string   "total"
     t.integer  "state"
     t.datetime "created_at", :null => false

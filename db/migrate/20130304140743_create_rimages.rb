@@ -6,6 +6,7 @@ class CreateRimages < ActiveRecord::Migration
       t.integer :scale
       t.integer :width
       t.integer :height
+      t.text :weights
       t.string :total
       t.integer :state
 

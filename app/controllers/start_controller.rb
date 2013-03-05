@@ -20,6 +20,11 @@ class StartController < ApplicationController
     @image.generate!
   end
   
+  def generate_m
+    @image = Rimage.find(session[:image_id])
+    @image.generate_m!
+  end
+  
   def sample
     
   end

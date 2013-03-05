@@ -3,7 +3,7 @@ include Magick
 
 class Rimage < ActiveRecord::Base
   
-  attr_accessible :path, :extName, :width, :height, :scale, :total, :state
+  attr_accessible :path, :extName, :width, :height, :scale, :weights, :total, :state
   
   def upload_path
     File.join("#{Rails.root}/public", self.path)
@@ -49,10 +49,6 @@ class Rimage < ActiveRecord::Base
     self.height / 10
   end
   
-  def weights
-    []
-  end
-  
   
   def self.upload(data, width, height)
     begin
@@ -75,6 +71,7 @@ class Rimage < ActiveRecord::Base
         rimage.scale = 10
         rimage.width = width.to_i
         rimage.height = height.to_i
+        rimage.weights = []
         rimage.total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].join('$')
         rimage.state = 1
         rimage.save
@@ -108,9 +105,7 @@ class Rimage < ActiveRecord::Base
     a = w / self.width
     b = h / self.height
     
-    @max = 65535
-    
-    img_c = Magick::Image.new(w, h, Magick::HatchFill.new('white', 'black', a))
+    img_c = Magick::Image.new(w, h, Magick::HatchFill.new('white', 'white', a))
     
     weights = []
     0.upto self.height-1 do |y|
@@ -120,7 +115,7 @@ class Rimage < ActiveRecord::Base
         sy = b * y
         ex = a * (x + 1)
         ey = b * (y + 1)
-        weight = cal_weight(sx, sy, ex, ey)        
+        weight = cal_weight(@obj, sx, sy, ex, ey)        
         
         weights[y][x] = 10 - weight
         midx = sx + a/2
@@ -133,7 +128,11 @@ class Rimage < ActiveRecord::Base
     
     img_c.write(self.full_path_c)
     
-       
+    self.weights = weights.map{|t|t.join('$')}.join('#')
+    self.save
+  end
+  
+  def generate_m!
     per = 50
     
     FileUtils.mkpath(self.full_path_m) unless File.directory?(self.full_path_m)
@@ -144,7 +143,7 @@ class Rimage < ActiveRecord::Base
     text.font_weight = Magick::BoldWeight
         
     total = self.total.split('$')
-    puts total
+    weights = self.weights.split('#').map{|t|t.split('$')}
     i = 0
     0.upto self.h - 1 do |y|
       0.upto self.w - 1 do |x|
@@ -160,7 +159,7 @@ class Rimage < ActiveRecord::Base
         sy.upto ey-1 do |yy|
           m = 0
           sx.upto ex-1 do |xx|
-            weight = weights[yy][xx]
+            weight = weights[yy][xx].to_i
             total[weight] = total[weight].to_i + 1
             text.annotate(img, per, per, m * per, n * per, weight.to_s)
             m = m + 1
@@ -173,20 +172,24 @@ class Rimage < ActiveRecord::Base
       end
     end
     self.total = total.join('$')
+    self.save
   end
   
   def cal_lu(p_color)
     0.299 * p_color.red + 0.587 * p_color.green + 0.114 * p_color.blue
   end
   
-  def cal_weight(sx, sy, ex, ey)
+  def cal_weight(obj, sx, sy, ex, ey)
     sum = 0
     sy.upto ey-1 do |y|
       sx.upto ex-1 do |x|
-        p_color = @obj.pixel_color(x, y)
+        p_color = obj.pixel_color(x, y)
         lu = cal_lu(p_color)
-        sum =+ (lu * 10 / @max).to_i
+        sum =+ (lu * 10 / 65535).to_i
       end
+    end
+    if sum == 1
+      sum = 2
     end
     sum
   end
