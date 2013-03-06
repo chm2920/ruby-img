@@ -52,7 +52,7 @@ class Rimage < ActiveRecord::Base
   end
   
   
-  def self.upload(data)
+  def self.upload(data, width, height)
     begin
       origName = data.original_filename
       baseName = File.basename(origName, ".*")
@@ -70,12 +70,10 @@ class Rimage < ActiveRecord::Base
           file.write(data.read)
         }
         
-        img = Magick::Image.read(rimage.full_path).first
-        
         rimage.scale = 4
-        rimage.width = img.columns
-        rimage.height = img.rows
-        rimage.weights = []
+        rimage.width = width.to_i
+        rimage.height = height.to_i
+        rimage.weights = ''
         rimage.total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].join('$')
         rimage.state = 1
         rimage.save
@@ -93,42 +91,64 @@ class Rimage < ActiveRecord::Base
     end
   end
   
-  def generate!(width, height, scale)
-    self.width = width.to_i
-    self.height = height.to_i
-    self.scale = scale.to_i
+  def generate!
+    min_scale = 4
     
     img = Magick::Image.read(self.full_path).first
+    
+    tw = self.width * min_scale
+    th = self.height * min_scale
+    
+    c = img.columns
+    r = img.rows
+    
+    if tw > c || th > r      
+      scale = min_scale
+      cw = tw
+      ch = th
+      if c / r > self.width / self.height
+        img = img.scale(tw, th * r / c)
+      else
+        img = img.scale((tw * c / r).to_i, th)     
+      end
+    else
+      if c / r > self.width / self.height
+        scale = (r / self.height).to_i
+        cw = self.width * scale
+        ch = self.height * scale
+      else
+        scale = (c / self.width).to_i
+        cw = self.width * scale
+        ch = self.height * scale
+      end
+    end
+    
+    self.scale = scale
+    
     #@obj = @obj.scale(400, 300)
-    img = img.crop(CenterGravity, self.width * self.scale, self.height * self.scale)
+    img = img.crop(CenterGravity, cw, ch)
     #chopped = @obj.crop(23, 81, 107, 139)
     img.write(self.full_path_b)
     
       
     @obj = Magick::Image.read(self.full_path_b).first
-    
-    w = @obj.columns
-    h = @obj.rows
-    
-    a = w / self.width
-    b = h / self.height
-    
-    img_c = Magick::Image.new(w, h, Magick::HatchFill.new('white', 'white', a))
+        
+    img_c = Magick::Image.new(cw, ch, Magick::HatchFill.new('white', 'white', scale))
     
     weights = []
     0.upto self.height-1 do |y|
       weights[y] = []
       0.upto self.width-1 do |x|
-        sx = a * x
-        sy = b * y
-        ex = a * (x + 1)
-        ey = b * (y + 1)
+        sx = scale * x
+        sy = scale * y
+        ex = scale * (x + 1)
+        ey = scale * (y + 1)
         weight = cal_weight(@obj, sx, sy, ex, ey)        
         
         weights[y][x] = 10 - weight
-        midx = sx + a/2
-        midy = sy + b/2
-        rdx = sx + (a/2 * weight) / 10
+        midx = sx + scale/2
+        midy = sy + scale/2
+        rdx = sx + (scale/2 * weight) / 10
         
         Magick::Draw.new.circle(midx, midy, rdx, midy).draw(img_c)
       end

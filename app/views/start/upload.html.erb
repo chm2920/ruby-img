@@ -1,7 +1,18 @@
 <div style="padding:200px 0;text-align:center;">
-<% if @image == 500 %>
-上传文件必须是图片 <a href="javascript:void(0);" onclick="javascript:history.back(-1);">返回</a>
-<% else %>
-<%= @image %>
-<% end %>
+	<%
+		case @image
+		when 500
+	%>
+		上传文件必须是图片 <a href="javascript:void(0);" onclick="javascript:history.back(-1);">返回</a>
+	<%
+		when 400
+	%>	
+		Error
+	<%
+		else
+	%>
+		<%= @image %>
+	<%
+		end
+	%>
 </div>

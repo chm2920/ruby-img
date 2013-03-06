@@ -43,30 +43,35 @@ input, option, select, textarea, button {font-size: 12px;}
 #Footer{border-top:1px solid #CCC;}
 .foot{padding:20px 0;}
 
+
 .uploadform{margin:100px 0;text-align:center;}
 .uploadform table{margin:0 auto;width:800px;}
 .uploadform td{padding:20px 0;text-align:center;}
 .uploadform td.tdl{text-align:left;}
 .uploadform td.tdl input{margin:0 4px 0 10px;}
 .uploadform input{line-height:20px;}
-.minInput{padding:4px 0;width:40px;text-align:center;}
+.minInput{width:50px;text-align:center;}
 .fileupload{margin:40px 0;padding:8px 40px;}
 
-.crop{text-align:center;}
-.crop-box{position:relative;text-align:left;}
-.crop img{width:500px;}
-.mask{position:absolute;top:100px;left:100px;width:300px;height:300px;background:#DDD;opacity:.6;}
 
-.preview{display:table;margin:10px 0;}
-.preview img{max-width:333px;}
-.preview-a, .preview-b, .preview-c{display:table-cell;width:333px;}
+.box{padding:40px 0;}
 
-.ms{width:1000px;border-spacing:0;border-collapse:collapse;}
-.ms td{padding:10px 0;text-align:center;}
+.panel{width:580px;text-align:left;}
+.panel img{max-width:560px;}
 
-.total{margin:10px 0;width:1000px;border-spacing:0;border-collapse:collapse;}
-.total td{padding:10px 0;text-align:center;border:1px solid #CCC;}
+.ops{width:400px;text-align:center;}
 
-.imginfo{clear:both;padding:20px;line-height:28px;font-size:14px;}
+.preview{position:relative;text-align:left;}
+.preview img{width:400px;}
+.mask{position:absolute;top:0;left:0;display:block;width:100px;height:100px;background:#666;border:1px solid #FFF;opacity:.6;}
+
+
+.m-preview{overflow:hidden;}
+.m-list{position:relative;width:560px;overflow:hidden;}
+.m-list table{position:absolute;top:0;left:0;border-collapse:collapse;border-spacing:0;}
+
+.total{width:100%;border-collapse:collapse;border-spacing:0;}
+.total td{border:1px solid #CCC;}
+
 
 

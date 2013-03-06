@@ -1,32 +1,17 @@
-<div class="crop">	
-	<div class="crop-box">
-		<div id="mask" class="mask"></div>
-		<img src="<%= @image.rel_path %>" />
+<div class="box clearfix">
+	<div class="panel l">
+		<a href="<%= @image.rel_path_c %>" target="_blank"><img src="<%= @image.rel_path_c %>" /></a>
 	</div>
-	<%= @image.width %> x <%= @image.height %>
-	<div class="uploadform">
-	<%= form_tag('/generate') do -%>
-	<table>
-		<colgroup>
-			<col style="width: 30%" />
-			<col style="width: 70%" />
-		</colgroup>
-		<tr>
-			<td>底板尺寸：</td>
-			<td class="tdl">
-				宽<input type="text" name="width" class="minInput" value="150" />x<input type="text" name="height" class="minInput" value="150">高
-			</td>
-		</tr>
-		<tr>
-			<td>单元格：</td>
-			<td class="tdl">
-				<input type="text" name="scale" class="minInput" value="4" />
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2"><input type="submit" name="submit" class="fileupload" value="生成魔点图" /></td>
-		</tr>
-	</table>
-	<% end -%>
+	<div class="ops r">
+		<div class="preview">
+			<div id="mask" class="mask"></div>
+			<img src="<%= @image.rel_path %>" />
+		</div>
+		<%= form_tag('/crop') do -%>
+		<input type="submit" name="submit" class="fileupload" value="生成魔点图" />
+		<% end -%>
+		<%= form_tag('/generate_m') do -%>
+		<input type="submit" name="submit" class="fileupload" value="生成图纸" />
+		<% end -%>
 	</div>
 </div>

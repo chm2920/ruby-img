@@ -4,7 +4,6 @@ RubyImg::Application.routes.draw do
   match "about" => "start#about"
   match "upload" => "start#upload"
   match "crop" => "start#crop"
-  match "generate" => "start#generate"
   match "generate_m" => "start#generate_m"
   
     
