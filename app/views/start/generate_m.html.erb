@@ -8,8 +8,8 @@
 		<div class="m-list" style="height:<%= w %>px;">
 			<table>
 				<tr>
-				<% 0.upto @image.h - 1 do %>
-					<% 0.upto @image.w - 1 do %>
+				<% 0.upto @image.height / @image.per_blank - 1 do %>
+					<% 0.upto @image.width / @image.per_blank - 1 do %>
 					<% i = i + 1 %>
 					<% imgPath = @image.rel_path_m + 'M' + i.to_s + '.jpg' %>
 					<td>

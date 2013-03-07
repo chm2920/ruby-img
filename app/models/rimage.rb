@@ -43,12 +43,8 @@ class Rimage < ActiveRecord::Base
     File.join(self.path, 'm/')
   end
   
-  def w
-    self.width / 10
-  end
-  
-  def h
-    self.height / 10
+  def per_blank
+    10
   end
   
   
@@ -113,11 +109,11 @@ class Rimage < ActiveRecord::Base
       end
     else
       if c / r > self.width / self.height
-        scale = (r / self.height).to_i
+        scale = r / self.height
         cw = self.width * scale
         ch = self.height * scale
       else
-        scale = (c / self.width).to_i
+        scale = c / self.width
         cw = self.width * scale
         ch = self.height * scale
       end
@@ -136,9 +132,9 @@ class Rimage < ActiveRecord::Base
     img_c = Magick::Image.new(cw, ch, Magick::HatchFill.new('white', 'white', scale))
     
     weights = []
-    0.upto self.height-1 do |y|
+    0.upto self.height - 1 do |y|
       weights[y] = []
-      0.upto self.width-1 do |x|
+      0.upto self.width - 1 do |x|
         sx = scale * x
         sy = scale * y
         ex = scale * (x + 1)
@@ -162,7 +158,7 @@ class Rimage < ActiveRecord::Base
   end
   
   def generate_m!
-    per = 50
+    per_pixels = 50
     
     FileUtils.mkpath(self.full_path_m) unless File.directory?(self.full_path_m)
     
@@ -174,15 +170,16 @@ class Rimage < ActiveRecord::Base
     total = self.total.split('$')
     weights = self.weights.split('#').map{|t|t.split('$')}
     i = 0
-    0.upto self.h - 1 do |y|
-      0.upto self.w - 1 do |x|
+    t = (self.height / self.per_blank) * (self.width / self.per_blank)
+    0.upto self.height / self.per_blank - 1 do |y|
+      0.upto self.width / self.per_blank - 1 do |x|
         i = i + 1
-        img = Magick::Image.new(per * self.scale, per * self.scale, Magick::HatchFill.new('white', 'black', per))
+        img = Magick::Image.new(per_pixels * per_blank, per_pixels * per_blank, Magick::HatchFill.new('white', 'black', per_pixels))
         
-        sx = x * self.scale
-        sy = y * self.scale
-        ex = (x + 1) * self.scale
-        ey = (y + 1) * self.scale
+        sx = x * per_blank
+        sy = y * per_blank
+        ex = (x + 1) * per_blank
+        ey = (y + 1) * per_blank
         
         n = 0
         sy.upto ey-1 do |yy|
@@ -190,13 +187,14 @@ class Rimage < ActiveRecord::Base
           sx.upto ex-1 do |xx|
             weight = weights[yy][xx].to_i
             total[weight] = total[weight].to_i + 1
-            text.annotate(img, per, per, m * per, n * per, weight.to_s)
+            text.annotate(img, per_pixels, per_pixels, m * per_pixels, n * per_pixels, weight.to_s)
             m = m + 1
           end
           n = n + 1
         end        
         
         path = File.join(self.full_path_m, 'M' + i.to_s + '.jpg')
+        puts i.to_s + '/' + t.to_s
         img.write(path)
       end
     end

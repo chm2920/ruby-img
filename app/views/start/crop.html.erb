@@ -1,11 +1,14 @@
 <div class="box clearfix">
 	<div class="panel l">
-		<a href="<%= @image.rel_path_c %>" target="_blank"><img src="<%= @image.rel_path_c %>" /></a>
+		<a href="<%= @image.rel_path_c %>" target="_blank"><img src="<%= @image.rel_path_c %>" id="show_pic" /></a>
+		<div id="natural_i" style="padding:10px 0;text-align:center;"></div>
 	</div>
 	<div class="ops r">
 		<div class="preview">
-			<div id="mask" class="mask"></div>
-			<img src="<%= @image.rel_path %>" />
+			<div id="mask" class="mask" style="text-align:center;color:#FFF;"></div>
+			<img src="<%= @image.rel_path %>" id="preview_pic" />
+			<div id="mask_i" class="mask-i"></div>
+			<div id="preview_i" class="preview-i"></div>
 		</div>
 		<%= form_tag('/crop') do -%>
 		<input type="submit" name="submit" class="fileupload" value="生成魔点图" />
@@ -15,3 +18,32 @@
 		<% end -%>
 	</div>
 </div>
+
+<script type="text/javascript">
+function $(v){return document.getElementById(v);}
+
+window.onload = function(){
+	var show_pic = $('show_pic')
+		, natural_i = $('natural_i')
+		, preview_pic = $('preview_pic');
+	
+	var sw = show_pic.naturalWidth
+		, sh = show_pic.naturalHeight
+		, pw = preview_pic.naturalWidth
+		, ph = preview_pic.naturalHeight
+		, w = preview_pic.width
+		, h = preview_pic.height
+		, scale = w / pw;
+		
+	natural_i.innerHTML = sw + ' x ' + sh + ' 精度：<%= @image.scale %>';
+	
+	$('mask').style.left = ((pw - sw) / 2) * scale + 'px';
+	$('mask').style.top = ((ph - sh) / 2) * scale + 'px';
+	$('mask').style.width = sw * scale + 'px';
+	$('mask').style.height = sh * scale + 'px';
+	$('mask_i').innerHTML = sw + ' x ' + sh;
+	
+	$('preview_i').innerHTML = pw + ' x ' + ph;
+		
+}
+</script>

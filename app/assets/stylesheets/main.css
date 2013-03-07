@@ -63,8 +63,9 @@ input, option, select, textarea, button {font-size: 12px;}
 
 .preview{position:relative;text-align:left;}
 .preview img{width:400px;}
-.mask{position:absolute;top:0;left:0;display:block;width:100px;height:100px;background:#666;border:1px solid #FFF;opacity:.6;}
-
+.mask{position:absolute;top:0;left:0;z-index:1;display:block;width:100px;height:100px;background:#666;border:1px solid #FFF;opacity:.6;}
+.mask-i{position:absolute;top:50%;left:50%;z-index:2;display:block;margin:-15px 0 0 -50px;width:100px;height:30px;line-height:30px;text-align:center;color:#FFF;}
+.preview-i{text-align:center;}
 
 .m-preview{overflow:hidden;}
 .m-list{position:relative;width:560px;overflow:hidden;}
