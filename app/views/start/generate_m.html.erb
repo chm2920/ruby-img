@@ -1,34 +1,42 @@
 <div class="box clearfix">
 	<div class="panel l">
-		<div class="m-preview">
+		<div id="m_preview" class="m-preview">
 			<a href="<%= @image.rel_path_m + 'M1.jpg' %>" target="_blank"><img src="<%= @image.rel_path_m + 'M1.jpg' %>" /></a>
+			<p>M1</p>
 		</div>
 		<% i = 0 %>
-		<% w = 100 %>
-		<div class="m-list" style="height:<%= w %>px;">
-			<table>
-				<tr>
-				<% 0.upto @image.height / @image.per_blank - 1 do %>
-					<% 0.upto @image.width / @image.per_blank - 1 do %>
-					<% i = i + 1 %>
-					<% imgPath = @image.rel_path_m + 'M' + i.to_s + '.jpg' %>
-					<td>
-						<a href="<%= imgPath %>" target="_blank"><img src="<%= imgPath %>" style="width:<%= w %>px" /></a>
-						<p>M<%= i.to_s %></p>
-					</td>
+		<div class="m-list">
+			<div id="nav_l" class="m-list-nav nav-l">&lt;</div>
+			<div id="nav_r" class="m-list-nav nav-r">&gt;</div>			
+			<div class="m-list-con">
+				<div class="tbox" id="tbox"></div>
+				<table id="m_list_tb">
+					<tr>
+					<% 0.upto @image.height / @image.per_blank - 1 do %>
+						<% 0.upto @image.width / @image.per_blank - 1 do %>
+						<% i = i + 1 %>
+						<% imgPath = @image.rel_path_m + 'M' + i.to_s + '.jpg' %>
+						<td>
+							<img src="<%= imgPath %>" />
+							<p>M<%= i.to_s %></p>
+						</td>
+						<% end %>
 					<% end %>
-				<% end %>
-				</tr>
-			</table>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</div>
 	<div class="ops r">
 		<table class="total">
 			<% total = @image.total.split('$').map{|i|i.to_i} %>
 			<tr>
+				<td colspan="3" style="text-align:center;">共 <%= total.sum / 100 %> 张图片</td>
+			</tr>
+			<tr>
 				<td>规格</td>
 				<td>个数</td>
-				<td rowspan="11">共 <%= total.sum %></td>
+				<td rowspan="11">共 <%= total.sum %> 个点</td>
 			</tr>
 			<% 2.upto total.length - 1 do |i| %>
 			<tr>
@@ -37,10 +45,56 @@
 			</tr>
 			<% end %>
 		</table>
-		<div class="op">打印</div>
-		<div class="op">下载</div>
+		<a href="#" class="op">下载</a>
 	</div>
 </div>
+<script type="text/javascript">
+function $(v){return document.getElementById(v);}
+
+var imgs = $('m_list_tb').getElementsByTagName('img');
+for(var i = 0, item; item = imgs[i]; i ++){
+	item.onclick = (function(i){
+		return function(){
+			setCur(i);
+		}
+	})(i);
+}
+
+function setCur(i){
+	var imgPath = '<%= @image.rel_path_m %>M' + (i + 1) + '.jpg';
+	$('m_preview').getElementsByTagName('img')[0].src = imgPath;
+	$('m_preview').getElementsByTagName('a')[0].href = imgPath;
+	$('m_preview').getElementsByTagName('p')[0].innerHTML = 'M' + (i + 1);
+	
+	$('tbox').style.left = i % 5 * 100 + 'px';
+}
+
+function onT(){
+	$('m_list_tb').style.left = - page * 500 + 'px';
+	$('tbox').style.left = '0px';
+	setCur(page * 5);
+}
+
+var page = 0;
+$('nav_l').onclick = function(){
+	if(page == 0){
+		return;
+	}
+	page -= 1;
+	onT();
+};
+
+$('nav_r').onclick = function(e){
+	e.preventDefault();
+	e.stopPropagation();
+	if(page == (imgs.length % 5 == 0 ? (imgs.length / 5) : (parseInt(imgs.length / 5, 10) + 1)) - 1){
+		return;
+	}
+	page += 1;
+	onT();
+};
+
+</script>
 
 
 

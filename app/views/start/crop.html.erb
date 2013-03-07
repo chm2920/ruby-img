@@ -11,7 +11,11 @@
 			<div id="preview_i" class="preview-i"></div>
 		</div>
 		<%= form_tag('/crop') do -%>
-		<input type="submit" name="submit" class="fileupload" value="生成魔点图" />
+		<div style="text-align:center;">
+			宽<input type="text" name="width" class="minInput" value="<%= @image.width %>" />x<input type="text" name="height" class="minInput" value="<%= @image.height %>">高
+			&nbsp;&nbsp;
+			<input type="submit" name="submit" class="fileupload" value="生成魔点图" />
+		</div>
 		<% end -%>
 		<%= form_tag('/generate_m') do -%>
 		<input type="submit" name="submit" class="fileupload" value="生成图纸" />
@@ -37,10 +41,18 @@ window.onload = function(){
 		
 	natural_i.innerHTML = sw + ' x ' + sh + ' 精度：<%= @image.scale %>';
 	
-	$('mask').style.left = ((pw - sw) / 2) * scale + 'px';
-	$('mask').style.top = ((ph - sh) / 2) * scale + 'px';
-	$('mask').style.width = sw * scale + 'px';
-	$('mask').style.height = sh * scale + 'px';
+	if(sw * scale > w){
+		$('mask').style.left = '0px';
+		$('mask').style.top = '0px';
+		$('mask').style.width = w + 'px';
+		$('mask').style.height = h + 'px';
+	} else {
+		$('mask').style.left = ((pw - sw) / 2) * scale + 'px';
+		$('mask').style.top = ((ph - sh) / 2) * scale + 'px';
+		$('mask').style.width = sw * scale + 'px';
+		$('mask').style.height = sh * scale + 'px';
+	}
+		
 	$('mask_i').innerHTML = sw + ' x ' + sh;
 	
 	$('preview_i').innerHTML = pw + ' x ' + ph;

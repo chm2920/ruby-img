@@ -80,13 +80,6 @@ class Rimage < ActiveRecord::Base
     end
   end
   
-  def check_size
-    img = Magick::Image.read(self.full_path).first
-    if img.columns > self.width || img.rows > self.height
-      
-    end
-  end
-  
   def generate!
     min_scale = 4
     

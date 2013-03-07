@@ -13,12 +13,27 @@ class StartController < ApplicationController
   
   def crop
     @image = Rimage.find(session[:image_id])
-    @image.generate!
+    if !params[:width].nil? && !params[:height].nil?
+      @image.width = params[:width]
+      @image.height = params[:height]
+      @image.save
+    end
+    case request.method
+    when "POST"
+      @image.generate!
+    else
+      if @image.state == 1
+        @image.generate!
+      end
+    end
   end
   
   def generate_m
     @image = Rimage.find(session[:image_id])
-    @image.generate_m!
+    case request.method
+    when "POST"
+      @image.generate_m!
+    end
   end
   
   def sample

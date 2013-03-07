@@ -53,6 +53,9 @@ input, option, select, textarea, button {font-size: 12px;}
 .minInput{width:50px;text-align:center;}
 .fileupload{margin:40px 0;padding:8px 40px;}
 
+.sample{margin:80px 0;width:999px;border-spacing:0;border-collapse:collapse;}
+.sample td{width:333px;}
+.sample td img{width:333px;}
 
 .box{padding:40px 0;}
 
@@ -67,12 +70,23 @@ input, option, select, textarea, button {font-size: 12px;}
 .mask-i{position:absolute;top:50%;left:50%;z-index:2;display:block;margin:-15px 0 0 -50px;width:100px;height:30px;line-height:30px;text-align:center;color:#FFF;}
 .preview-i{text-align:center;}
 
-.m-preview{overflow:hidden;}
-.m-list{position:relative;width:560px;overflow:hidden;}
-.m-list table{position:absolute;top:0;left:0;border-collapse:collapse;border-spacing:0;}
+.m-preview{text-align:center;}
+.m-preview p{line-height:60px;font-weight:bold;font-size:14px;}
+.m-list{position:relative;width:560px;height:120px;}
+.m-list-nav{position:absolute;top:0;display:block;width:20px;height:120px;line-height:120px;background:#EEE;text-align:center;cursor:pointer;}
+.nav-l{left:0;}
+.nav-r{right:0;}
+.nav-disabled{opacity:.6;}
+.m-list-con{position:relative;margin:0 auto;width:502px;height:120px;background:#FFF;overflow:hidden;}
+.tbox{position:absolute;top:0;z-index:2;display:block;width:100px;height:100px;border:1px solid #333;}
+.m-list-con table{position:absolute;top:0;left:0;z-index:1;border-collapse:collapse;border-spacing:0;}
+.m-list-con img{width:100px;cursor:pointer;}
+.m-list-con p{padding:0;height:20px;line-height:20px;text-align:center;font-size:14px;font-weight:bold;color:#000;}
 
-.total{width:100%;border-collapse:collapse;border-spacing:0;}
-.total td{border:1px solid #CCC;}
+.total{margin:0 auto;width:360px;border-collapse:collapse;border-spacing:0;}
+.total td{width:120px;padding:10px;border:1px solid #CCC;}
 
+a.op{display:block;margin:50px auto 0;width:160px;height:40px;line-height:40px;border:1px solid #CCC;background:#F8F8F8;text-align:center;letter-spacing:4px;text-decoration:none;}
+a.op:hover{background:#EEE;text-decoration:none;}
 
 
