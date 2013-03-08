@@ -80,21 +80,19 @@ class Rimage < ActiveRecord::Base
     end
   end
   
-  def generate!
+  def check_size
     min_scale = 4
     
     img = Magick::Image.read(self.full_path).first
     
-    tw = self.width * min_scale
-    th = self.height * min_scale
-    
     c = img.columns
     r = img.rows
     
+    tw = self.width * min_scale
+    th = self.height * min_scale
+    
     if tw > c || th > r      
       scale = min_scale
-      cw = tw
-      ch = th
       if c / r > self.width / self.height
         img = img.scale(tw, th * r / c)
       else
@@ -103,16 +101,17 @@ class Rimage < ActiveRecord::Base
     else
       if c / r > self.width / self.height
         scale = r / self.height
-        cw = self.width * scale
-        ch = self.height * scale
       else
-        scale = c / self.width
-        cw = self.width * scale
-        ch = self.height * scale
+        scale = c / self.width        
       end
     end
-    
+    self.generate!(img, scale)
+  end
+  
+  def generate!(img, scale)    
     self.scale = scale
+    cw = self.width * scale
+    ch = self.height * scale
     
     #@obj = @obj.scale(400, 300)
     img = img.crop(CenterGravity, cw, ch)

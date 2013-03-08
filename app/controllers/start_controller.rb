@@ -20,10 +20,14 @@ class StartController < ApplicationController
     end
     case request.method
     when "POST"
-      @image.generate!
+      img = Magick::Image.read(@image.full_path).first
+      if !params[:w].nil? && !params[:h].nil?
+        img = img.scale(params[:w].to_i, params[:h].to_i)
+      end
+      @image.generate!(img, params[:scale].to_i)
     else
       if @image.state == 1
-        @image.generate!
+        @image.check_size
       end
     end
   end

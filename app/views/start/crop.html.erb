@@ -12,8 +12,11 @@
 		</div>
 		<%= form_tag('/crop') do -%>
 		<div style="text-align:center;">
+			宽<input type="text" name="w" class="minInput" value="<%= @image.width %>" />x<input type="text" name="h" class="minInput" value="<%= @image.height %>">高
+		</div>
+		<div style="text-align:center;">
 			宽<input type="text" name="width" class="minInput" value="<%= @image.width %>" />x<input type="text" name="height" class="minInput" value="<%= @image.height %>">高
-			&nbsp;&nbsp;
+			&nbsp;&nbsp;<input type="text" name="scale" class="minInput" value="<%= @image.scale %>" />&nbsp;&nbsp;
 			<input type="submit" name="submit" class="fileupload" value="生成魔点图" />
 		</div>
 		<% end -%>
