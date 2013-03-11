@@ -7,3 +7,7 @@ gem 'will_paginate'
 
 gem 'kindeditor'
 gem 'rmagick'
+
+group :assets do
+  gem 'uglifier'
+end 
