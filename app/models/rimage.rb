@@ -113,24 +113,26 @@ class Rimage < ActiveRecord::Base
       else
         img = img.scale((tw * c / r).to_i, th)     
       end
+      #img.write(self.full_path)
     else
       if c / r > self.width / self.height
-        img = img.scale(r * self.width / self.height, r)
+        img = img.scale(tw, (tw * r / c).to_i)
       else
-        img = img.scale(c, c * self.height / self.width)
+        img = img.scale((th * c / r).to_i, th)
       end    
     end
-    self.generate!(img)
+    self.generate!(0, 0, img)
   end
   
-  def generate!(img) 
+  def generate!(px, py, img) 
     scale = 4   
     self.scale = scale
     cw = self.width * scale
     ch = self.height * scale
     
     #@obj = @obj.scale(400, 300)
-    img = img.crop(CenterGravity, cw, ch)
+    #img = img.crop(CenterGravity, cw, ch)
+    img = img.crop(px, py, cw, ch)
     #chopped = @obj.crop(23, 81, 107, 139)
     img.write(self.full_path_b)
     
