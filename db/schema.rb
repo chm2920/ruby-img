@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20130304140743) do
     t.text     "weights"
     t.string   "total"
     t.integer  "state"
+    t.string   "extends"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

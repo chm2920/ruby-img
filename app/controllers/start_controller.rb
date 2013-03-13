@@ -24,7 +24,7 @@ class StartController < ApplicationController
       if !params[:w].nil? && !params[:h].nil?
         img = img.scale(params[:w].to_i, params[:h].to_i)
       end
-      @image.generate!(img, params[:scale].to_i)
+      @image.generate!(img)
     else
       if @image.state == 1
         @image.check_size

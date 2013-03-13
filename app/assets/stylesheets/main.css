@@ -59,7 +59,7 @@ input, option, select, textarea, button {font-size: 12px;}
 
 .box{padding:40px 0;}
 
-.panel{width:580px;text-align:left;}
+.panel{width:580px;text-align:center;}
 .panel img{max-width:560px;}
 
 .ops{width:400px;text-align:center;}

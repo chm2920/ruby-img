@@ -3,7 +3,7 @@ include Magick
 
 class Rimage < ActiveRecord::Base
   
-  attr_accessible :path, :extName, :width, :height, :scale, :weights, :total, :state
+  attr_accessible :path, :extName, :width, :height, :scale, :weights, :total, :state, :extends
   
   before_destroy :remove_file
   
@@ -47,6 +47,22 @@ class Rimage < ActiveRecord::Base
     10
   end
   
+  def sx
+    self.extends ? self.extends.split('##')[0] : ''
+  end
+  
+  def sy
+    self.extends ? self.extends.split('##')[1] : ''
+  end
+  
+  def tw
+    self.extends ? self.extends.split('##')[2] : ''
+  end
+  
+  def th
+    self.extends ? self.extends.split('##')[3] : ''
+  end
+  
   
   def self.upload(data, width, height)
     begin
@@ -81,18 +97,17 @@ class Rimage < ActiveRecord::Base
   end
   
   def check_size
-    min_scale = 4
+    scale = 4
     
     img = Magick::Image.read(self.full_path).first
     
     c = img.columns
     r = img.rows
     
-    tw = self.width * min_scale
-    th = self.height * min_scale
+    tw = self.width * scale
+    th = self.height * scale
     
-    if tw > c || th > r      
-      scale = min_scale
+    if tw > c || th > r
       if c / r > self.width / self.height
         img = img.scale(tw, th * r / c)
       else
@@ -100,15 +115,16 @@ class Rimage < ActiveRecord::Base
       end
     else
       if c / r > self.width / self.height
-        scale = r / self.height
+        img = img.scale(r * self.width / self.height, r)
       else
-        scale = c / self.width        
-      end
+        img = img.scale(c, c * self.height / self.width)
+      end    
     end
-    self.generate!(img, scale)
+    self.generate!(img)
   end
   
-  def generate!(img, scale)    
+  def generate!(img) 
+    scale = 4   
     self.scale = scale
     cw = self.width * scale
     ch = self.height * scale

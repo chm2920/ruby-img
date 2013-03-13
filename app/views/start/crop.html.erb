@@ -12,11 +12,9 @@
 		</div>
 		<%= form_tag('/crop') do -%>
 		<div style="text-align:center;">
-			宽<input type="text" name="w" class="minInput" value="<%= @image.width %>" />x<input type="text" name="h" class="minInput" value="<%= @image.height %>">高
-		</div>
-		<div style="text-align:center;">
-			宽<input type="text" name="width" class="minInput" value="<%= @image.width %>" />x<input type="text" name="height" class="minInput" value="<%= @image.height %>">高
-			&nbsp;&nbsp;<input type="text" name="scale" class="minInput" value="<%= @image.scale %>" />&nbsp;&nbsp;
+			宽<input type="text" name="width" class="minInput" value="<%= @image.width %>" />x<input type="text" name="height" class="minInput" value="<%= @image.height %>">高			
+			<input type="hidden" name="x" value="<%= @image.sx %>" /><input type="hidden" name="y" value="<%= @image.sy %>">
+			<input type="hidden" name="w" value="<%= @image.tw %>" /><input type="hidden" name="h" value="<%= @image.th %>">
 			<input type="submit" name="submit" class="fileupload" value="生成魔点图" />
 		</div>
 		<% end -%>
@@ -25,40 +23,7 @@
 		<% end -%>
 	</div>
 </div>
-
+<%= javascript_include_tag 'jquery-1.8.3.min', 'crop' %>
 <script type="text/javascript">
-function $(v){return document.getElementById(v);}
-
-window.onload = function(){
-	var show_pic = $('show_pic')
-		, natural_i = $('natural_i')
-		, preview_pic = $('preview_pic');
-	
-	var sw = show_pic.naturalWidth
-		, sh = show_pic.naturalHeight
-		, pw = preview_pic.naturalWidth
-		, ph = preview_pic.naturalHeight
-		, w = preview_pic.width
-		, h = preview_pic.height
-		, scale = w / pw;
-		
-	natural_i.innerHTML = sw + ' x ' + sh + ' 精度：<%= @image.scale %>';
-	
-	if(sw * scale > w){
-		$('mask').style.left = '0px';
-		$('mask').style.top = '0px';
-		$('mask').style.width = w + 'px';
-		$('mask').style.height = h + 'px';
-	} else {
-		$('mask').style.left = ((pw - sw) / 2) * scale + 'px';
-		$('mask').style.top = ((ph - sh) / 2) * scale + 'px';
-		$('mask').style.width = sw * scale + 'px';
-		$('mask').style.height = sh * scale + 'px';
-	}
-		
-	$('mask_i').innerHTML = sw + ' x ' + sh;
-	
-	$('preview_i').innerHTML = pw + ' x ' + ph;
-		
-}
+	crop.scale = <%= @image.scale %>;
 </script>

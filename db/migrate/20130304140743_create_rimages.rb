@@ -9,6 +9,7 @@ class CreateRimages < ActiveRecord::Migration
       t.text :weights
       t.string :total
       t.integer :state
+      t.string :extends
 
       t.timestamps
     end
