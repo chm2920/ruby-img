@@ -3,7 +3,7 @@ class CreateRimages < ActiveRecord::Migration
     create_table :rimages do |t|
       t.string :path
       t.string :extName
-      t.integer :scale
+      t.string :scale
       t.integer :width
       t.integer :height
       t.text :weights

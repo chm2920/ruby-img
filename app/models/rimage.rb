@@ -12,6 +12,10 @@ class Rimage < ActiveRecord::Base
   end
   
   def full_path
+    File.join(self.upload_path, 'or' + self.extName)
+  end
+  
+  def full_path_a
     File.join(self.upload_path, 'a' + self.extName)
   end
   
@@ -28,6 +32,10 @@ class Rimage < ActiveRecord::Base
   end
   
   def rel_path
+    File.join(self.path, 'or' + self.extName)
+  end
+  
+  def rel_path_a
     File.join(self.path, 'a' + self.extName)
   end
   
@@ -97,38 +105,43 @@ class Rimage < ActiveRecord::Base
   end
   
   def check_size
-    scale = 4
+    per_pixs = 4
     
     img = Magick::Image.read(self.full_path).first
     
     c = img.columns
     r = img.rows
     
-    tw = self.width * scale
-    th = self.height * scale
+    tw = self.width * per_pixs
+    th = self.height * per_pixs
     
     if tw > c || th > r
       if c / r > self.width / self.height
+        scale = th.to_s + '-' + c.to_s + '-' + 'x'
         img = img.scale(tw, th * r / c)
       else
+        scale = tw.to_s + '-' + r.to_s + '-' + 'y'
         img = img.scale((tw * c / r).to_i, th)     
-      end
-      #img.write(self.full_path)
+      end      
     else
       if c / r > self.width / self.height
-        img = img.scale(tw, (tw * r / c).to_i)
-      else
+        scale = th.to_s + '-' + r.to_s + '-' + 'y'
         img = img.scale((th * c / r).to_i, th)
+      else
+        scale = tw.to_s + '-' + c.to_s + '-' + 'x'
+        img = img.scale(tw, (tw * r / c).to_i)
       end    
     end
+    img.write(self.full_path_a)
+    self.scale = scale
+    self.extends = [0, 0, tw, th].join('##')
     self.generate!(0, 0, img)
   end
   
   def generate!(px, py, img) 
-    scale = 4   
-    self.scale = scale
-    cw = self.width * scale
-    ch = self.height * scale
+    per_pixs = 4   
+    cw = self.width * per_pixs
+    ch = self.height * per_pixs
     
     #@obj = @obj.scale(400, 300)
     #img = img.crop(CenterGravity, cw, ch)
@@ -139,22 +152,22 @@ class Rimage < ActiveRecord::Base
       
     @obj = Magick::Image.read(self.full_path_b).first
         
-    img_c = Magick::Image.new(cw, ch, Magick::HatchFill.new('white', 'white', scale))
+    img_c = Magick::Image.new(cw, ch, Magick::HatchFill.new('white', 'white', per_pixs))
     
     weights = []
     0.upto self.height - 1 do |y|
       weights[y] = []
       0.upto self.width - 1 do |x|
-        sx = scale * x
-        sy = scale * y
-        ex = scale * (x + 1)
-        ey = scale * (y + 1)
+        sx = per_pixs * x
+        sy = per_pixs * y
+        ex = per_pixs * (x + 1)
+        ey = per_pixs * (y + 1)
         weight = cal_weight(@obj, sx, sy, ex, ey)        
         
         weights[y][x] = 10 - weight
-        midx = sx + scale/2
-        midy = sy + scale/2
-        rdx = sx + (scale/2 * weight) / 10
+        midx = sx + per_pixs/2
+        midy = sy + per_pixs/2
+        rdx = sx + (per_pixs/2 * weight) / 10
         
         Magick::Draw.new.circle(midx, midy, rdx, midy).draw(img_c)
       end
@@ -233,7 +246,7 @@ class Rimage < ActiveRecord::Base
   end
   
   def remove_file
-    puts 'remove file'
+    `rm -rf #{self.upload_path}`
   end
   
 end

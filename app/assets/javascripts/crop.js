@@ -1,7 +1,6 @@
 var crop = {
 	init: function(){
 		var show_pic = $('#show_pic')[0]
-			, natural_i = $('#natural_i')[0]
 			, preview_pic = $('#preview_pic')[0];
 		
 		var sw = show_pic.naturalWidth
@@ -9,29 +8,31 @@ var crop = {
 			, pw = preview_pic.naturalWidth
 			, ph = preview_pic.naturalHeight
 			, w = preview_pic.width
-			, h = preview_pic.height
-			, scale = w / pw;
+			, h = preview_pic.height;
 			
-		natural_i.innerHTML = sw + ' x ' + sh;
+		console.log(sw);
 		
-		if(sw * scale > w){
-			$('#mask').css({
-				'left': '0px',
-				'top': '0px',
-				'width': w + 'px',
-				'height': h + 'px'
-			});
+		var arr = this.scale.split('-');
+		var scale = arr[1] / arr[0]
+			, cw = parseInt(sw * scale, 10)
+			, ch = parseInt(sh * scale, 10);
+		if(arr[2] == 'x'){
+			var showScale = w / arr[1];
 		} else {
-			$('#mask').css({
-				'left': ((pw - sw) / 2) * scale + 'px',
-				'top': ((ph - sh) / 2) * scale + 'px',
-				'width': sw * scale + 'px',
-				'height': sh * scale + 'px'
-			});
-		}
-			
-		$('#mask_i').html(sw + ' x ' + sh);
+			var showScale = h / arr[1];
+		};
+		var cwS = cw * showScale
+			, chS = ch * showScale;
 		
+		$('#mask').css({
+			'left': '0px',
+			'top': '0px',
+			'width': cwS + 'px',
+			'height': chS + 'px'
+		});
+			
+		$('#natural_i').html(sw + ' x ' + sh);
+		$('#mask_i').html(cw + ' x ' + ch);		
 		$('#preview_i').html(pw + ' x ' + ph);
 	},
 	
@@ -44,8 +45,13 @@ var crop = {
 };
 
 
-$(document).ready(function(){
-	
-	crop.init();
-	
+$(document).ready(function(){	
+	$(document).imagesLoaded({
+	    done: function ($images) {
+	    	crop.init();
+	    },
+	    fail: function ($images, $proper, $broken) {},
+	    always: function () {},
+	    progress: function (isBroken, $images, $proper, $broken) {}
+	});
 });

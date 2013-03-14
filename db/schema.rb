@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(:version => 20130304140743) do
   create_table "rimages", :force => true do |t|
     t.string   "path"
     t.string   "extName"
-    t.integer  "scale"
+    t.string   "scale"
     t.integer  "width"
     t.integer  "height"
     t.text     "weights"
