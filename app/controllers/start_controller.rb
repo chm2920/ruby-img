@@ -21,7 +21,7 @@ class StartController < ApplicationController
     case request.method
     when "POST"
       if !params[:x].nil? && !params[:y].nil? && !params[:w].nil? && !params[:h].nil?
-        @image.crop(params[:x], params[:y], params[:w], params[:h])
+        @image.crop(params[:x].to_i, params[:y].to_i, params[:w].to_i, params[:h].to_i)
       end
     else
       if @image.state == 1

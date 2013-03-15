@@ -152,6 +152,7 @@ class Rimage < ActiveRecord::Base
   end
   
   def crop(x, y, w, h)
+    img = Magick::Image.read(self.full_path).first
     img = img.crop(x, y, w, h)
     img.write(self.full_path_a)
     
@@ -161,6 +162,7 @@ class Rimage < ActiveRecord::Base
     img = img.scale(tw, th)
     img.write(self.full_path_b) 
     
+    #self.scale = tw.to_s + '-' + w.to_s + '-' + 'y'
     self.extends = [x, y, w, h].join('##')  
     
     self.generate!

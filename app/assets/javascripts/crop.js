@@ -16,6 +16,7 @@ var crop = {
 		var scale = arr[1] / arr[0]
 			, cw = parseInt(sw * scale, 10)
 			, ch = parseInt(sh * scale, 10);
+			
 		if(arr[2] == 'x'){
 			var showScale = w / arr[1];
 		} else {
