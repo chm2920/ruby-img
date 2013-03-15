@@ -4,11 +4,12 @@
 		<tr>
 			<th width="5%">ID</th>
 			<th>path</th>
-			<th width="5%">scale</th>
+			<th width="10%">scale</th>
 			<th width="5%">width</th>
 			<th width="5%">height</th>
 			<th>total</th>
 			<th width="5%">state</th>
+			<th width="10%">extends</th>
 			<th width="10%">时间</th>
 			<th width="10%">管理</th>
 		</tr>
@@ -29,6 +30,7 @@
 			<td><% arr = rimage.total.split('$') %>
 			<%= arr.join('+') %>=<%= arr.map{|t|t.to_i}.sum %></td>
 			<td><%= rimage.state %></td>
+			<td><%= rimage.extends %></td>
 			<td><%= rimage.created_at.strftime("%Y-%m-%d") %></td>
 			<td>
 				<%= link_to "删除", {:action => "destroy", :id => rimage}, :confirm => "确定删除？", :method => "delete" %>
@@ -43,7 +45,7 @@
 	%>
 	<tbody>
 		<tr>
-			<td colspan="9" style="text-align:left;">&nbsp;还没有内容。</td>
+			<td colspan="10" style="text-align:left;">&nbsp;还没有内容。</td>
 		</tr>
 	</tbody>
 	<%

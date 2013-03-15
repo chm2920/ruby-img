@@ -13,18 +13,16 @@ class StartController < ApplicationController
   
   def crop
     @image = Rimage.find(session[:image_id])
-    if !params[:width].nil? && !params[:height].nil?
+    if !params[:width].nil? && !params[:height].nil? && params[:width] != @image.width && params[:height] != @image.height
       @image.width = params[:width]
       @image.height = params[:height]
       @image.save
     end
     case request.method
     when "POST"
-      img = Magick::Image.read(@image.full_path).first
-      if !params[:w].nil? && !params[:h].nil?
-        img = img.scale(params[:w].to_i, params[:h].to_i)
+      if !params[:x].nil? && !params[:y].nil? && !params[:w].nil? && !params[:h].nil?
+        @image.crop(params[:x], params[:y], params[:w], params[:h])
       end
-      @image.generate!(img)
     else
       if @image.state == 1
         @image.check_size

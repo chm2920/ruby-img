@@ -27,5 +27,5 @@
 <%= javascript_include_tag 'jquery-1.8.3.min', 'jquery.imagesloaded.min', 'crop' %>
 <script type="text/javascript">
 	crop.scale = '<%= @image.scale %>';
-	crop.exs = '<%= @image.extends %>';
+	crop.exs = '<%= @image.extends %>'.split('##');
 </script>

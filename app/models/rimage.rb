@@ -109,46 +109,67 @@ class Rimage < ActiveRecord::Base
     
     img = Magick::Image.read(self.full_path).first
     
-    c = img.columns
-    r = img.rows
+    c = img.columns.to_i
+    r = img.rows.to_i
     
     tw = self.width * per_pixs
     th = self.height * per_pixs
     
     if tw > c || th > r
-      if c / r > self.width / self.height
+      if c * self.height >= self.width * r #c / r > self.width / self.height
         scale = th.to_s + '-' + c.to_s + '-' + 'x'
-        img = img.scale(tw, th * r / c)
+        scale_x = tw
+        scale_y = th * r / c
       else
         scale = tw.to_s + '-' + r.to_s + '-' + 'y'
-        img = img.scale((tw * c / r).to_i, th)     
+        scale_x = (tw * c / r).to_i
+        scale_y = th  
       end      
     else
-      if c / r > self.width / self.height
+      if c * self.height >= self.width * r
         scale = th.to_s + '-' + r.to_s + '-' + 'y'
-        img = img.scale((th * c / r).to_i, th)
+        scale_x = (th * c / r).to_i
+        scale_y = th
       else
         scale = tw.to_s + '-' + c.to_s + '-' + 'x'
-        img = img.scale(tw, (tw * r / c).to_i)
+        scale_x = tw
+        scale_y = (tw * r / c).to_i
       end    
     end
-    img.write(self.full_path_a)
+    img = img.scale(scale_x, scale_y)
+    img.write(self.full_path_a) 
+    
+    #img = img.crop(CenterGravity, cw, ch)
+    img = img.crop(0, 0, tw, th)
+    img.write(self.full_path_b)
+    
     self.scale = scale
-    self.extends = [0, 0, tw, th].join('##')
-    self.generate!(0, 0, img)
+    s = scale.split('-')    
+    iScale = s[1].to_i / s[0].to_i
+    self.extends = [0, 0, tw * iScale, th * iScale].join('##')   
+    
+    self.generate!
   end
   
-  def generate!(px, py, img) 
+  def crop(x, y, w, h)
+    img = img.crop(x, y, w, h)
+    img.write(self.full_path_a)
+    
+    per_pixs = 4
+    tw = self.width * per_pixs
+    th = self.height * per_pixs
+    img = img.scale(tw, th)
+    img.write(self.full_path_b) 
+    
+    self.extends = [x, y, w, h].join('##')  
+    
+    self.generate!
+  end
+  
+  def generate! 
     per_pixs = 4   
     cw = self.width * per_pixs
     ch = self.height * per_pixs
-    
-    #@obj = @obj.scale(400, 300)
-    #img = img.crop(CenterGravity, cw, ch)
-    img = img.crop(px, py, cw, ch)
-    #chopped = @obj.crop(23, 81, 107, 139)
-    img.write(self.full_path_b)
-    
       
     @obj = Magick::Image.read(self.full_path_b).first
         
