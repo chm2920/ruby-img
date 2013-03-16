@@ -13,9 +13,9 @@
 		</div>
 		<%= form_tag('/crop') do -%>
 		<div style="text-align:center;">
-			宽<input type="text" name="width" class="minInput" value="<%= @image.width %>" />x<input type="text" name="height" class="minInput" value="<%= @image.height %>">高			
-			<input type="hidden" name="x" value="<%= @image.sx %>" /><input type="hidden" name="y" value="<%= @image.sy %>">
-			<input type="hidden" name="w" value="<%= @image.tw %>" /><input type="hidden" name="h" value="<%= @image.th %>">
+			宽<input type="text" name="width" id="ipt_width" class="minInput" value="<%= @image.width %>" />x<input type="text" name="height" id="ipt_height" class="minInput" value="<%= @image.height %>">高			
+			<input type="hidden" name="x" id="ipt_x" value="<%= @image.sx %>" /><input type="hidden" name="y" id="ipt_y" value="<%= @image.sy %>">
+			<input type="hidden" name="w" id="ipt_w" value="<%= @image.tw %>" /><input type="hidden" name="h" id="ipt_h" value="<%= @image.th %>">
 			<input type="submit" name="submit" class="fileupload" value="生成魔点图" />
 		</div>
 		<% end -%>
@@ -24,7 +24,7 @@
 		<% end -%>
 	</div>
 </div>
-<%= javascript_include_tag 'jquery-1.8.3.min', 'jquery.imagesloaded.min', 'crop' %>
+<%= javascript_include_tag 'jquery-1.8.3.min', 'jquery.mousewheel.min', 'jquery.imagesloaded.min', 'crop' %>
 <script type="text/javascript">
 	crop.scale = '<%= @image.scale %>';
 	crop.exs = '<%= @image.extends %>'.split('##');
