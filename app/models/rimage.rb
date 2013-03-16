@@ -112,43 +112,15 @@ class Rimage < ActiveRecord::Base
     c = img.columns.to_i
     r = img.rows.to_i
     
-    tw = self.width * per_pixs
-    th = self.height * per_pixs
-    
-    if tw > c || th > r
-      if c * self.height >= self.width * r #c / r > self.width / self.height
-        scale = th.to_s + '-' + c.to_s + '-' + 'x'
-        scale_x = tw
-        scale_y = th * r / c
-      else
-        scale = tw.to_s + '-' + r.to_s + '-' + 'y'
-        scale_x = (tw * c / r).to_i
-        scale_y = th  
-      end      
+    if c * self.height >= self.width * r #c / r > self.width / self.height
+      cw = self.width * r / self.height
+      ch = r
     else
-      if c * self.height >= self.width * r
-        scale = th.to_s + '-' + r.to_s + '-' + 'y'
-        scale_x = (th * c / r).to_i
-        scale_y = th
-      else
-        scale = tw.to_s + '-' + c.to_s + '-' + 'x'
-        scale_x = tw
-        scale_y = (tw * r / c).to_i
-      end    
-    end
-    img = img.scale(scale_x, scale_y)
-    img.write(self.full_path_a) 
+      cw = c
+      ch = self.height * c / self.width
+    end 
     
-    #img = img.crop(CenterGravity, cw, ch)
-    img = img.crop(0, 0, tw, th)
-    img.write(self.full_path_b)
-    
-    self.scale = scale
-    s = scale.split('-')    
-    iScale = s[1].to_i / s[0].to_i
-    self.extends = [0, 0, tw * iScale, th * iScale].join('##')   
-    
-    self.generate!
+    self.crop(0, 0, cw, ch)
   end
   
   def crop(x, y, w, h)
@@ -159,10 +131,11 @@ class Rimage < ActiveRecord::Base
     per_pixs = 4
     tw = self.width * per_pixs
     th = self.height * per_pixs
+    
     img = img.scale(tw, th)
     img.write(self.full_path_b) 
     
-    #self.scale = tw.to_s + '-' + w.to_s + '-' + 'y'
+    self.scale = w.to_s + '-' + tw.to_s
     self.extends = [x, y, w, h].join('##')  
     
     self.generate!

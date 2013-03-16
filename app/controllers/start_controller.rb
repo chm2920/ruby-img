@@ -12,7 +12,12 @@ class StartController < ApplicationController
   end
   
   def crop
-    @image = Rimage.find(session[:image_id])
+    if session[:image_id]
+      @image = Rimage.find(session[:image_id])
+    else
+      @image = Rimage.first
+      session[:image_id] = @image.id
+    end
     if !params[:width].nil? && !params[:height].nil? && params[:width] != @image.width && params[:height] != @image.height
       @image.width = params[:width]
       @image.height = params[:height]

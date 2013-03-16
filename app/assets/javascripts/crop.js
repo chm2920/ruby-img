@@ -1,5 +1,8 @@
 var crop = {
 	init: function(){
+		this.showInfo();
+	},
+	showInfo: function(){
 		var show_pic = $('#show_pic')[0]
 			, preview_pic = $('#preview_pic')[0];
 		
@@ -10,24 +13,25 @@ var crop = {
 			, w = preview_pic.width
 			, h = preview_pic.height
 			, l = this.exs[0]
-			, t = this.exs[1];
-		
-		var arr = this.scale.split('-');
-		var scale = arr[1] / arr[0]
-			, cw = parseInt(sw * scale, 10)
-			, ch = parseInt(sh * scale, 10);
+			, t = this.exs[1]
+			, cw = this.exs[2]
+			, ch = this.exs[3];
 			
-		if(arr[2] == 'x'){
-			var showScale = w / arr[1];
-		} else {
-			var showScale = h / arr[1];
-		};
-		var cwS = cw * showScale
-			, chS = ch * showScale;
+		if(pw < w){
+			return;
+		}
+		
+		var scale = cw / sw;
+			
+		this.showScale = w / pw;
+		var lS = l * this.showScale
+			, tS = t * this.ShowScale
+			, cwS = cw * this.showScale
+			, chS = ch * this.showScale;
 		
 		$('#mask').css({
-			'left': l + 'px',
-			'top': t + 'px',
+			'left': lS + 'px',
+			'top': tS + 'px',
 			'width': cwS + 'px',
 			'height': chS + 'px'
 		});
@@ -39,8 +43,12 @@ var crop = {
 	
 	bind: function(){
 		$("#mask").mousewheel(function(e, t) {
-		    var n = t > 0 ? "Up" : "Down", r = parseInt($("#timelist").css("top"));
-		    return n == "Up" ? $("#timelist").css({top: r + 20 + "px"}) : $("#timelist").css({top: r - 20 + "px"})
+		    var n = t > 0 ? "Up" : "Down";
+		    if(n == "Up"){
+		    	
+		    } else {
+		    	
+		    }
 		});
 	}	
 };
