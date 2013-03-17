@@ -1,6 +1,6 @@
 <div class="box clearfix">
 	<div class="panel l">
-		<a href="<%= @image.rel_path_c %>" target="_blank"><img src="<%= @image.rel_path_c %>" id="show_pic" /></a>
+		<a href="<%= @image.rel_path_c %>" target="_blank"><img src="<%= @image.rel_path_c %>?<%= Time.now.to_s %>" id="show_pic" /></a>
 		<div id="natural_i" style="padding:10px 0;text-align:center;"></div>
 	</div>
 	<div class="ops r">

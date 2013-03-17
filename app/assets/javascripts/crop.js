@@ -53,14 +53,15 @@ var crop = {
 		    	, cw = $(this).width()
 		    	, ch = $(this).height()
 		    	, hw = parseInt($('#ipt_height').val(), 10) / parseInt($('#ipt_width').val(), 10)
-		    	, nw = self.preview_pic.naturalWidth;
+		    	, nw = self.preview_pic.naturalWidth
+		    	, nh = self.preview_pic.naturalHeight;
 		    if(n == "Up"){
 		    	if(w == nw / 4){
 		    		return;
 		    	}
 		    	w = w - 10;
 		    } else {
-		    	if(w == nw){
+		    	if(w == nw || h == nh){
 		    		return;
 		    	}
 		    	w = w + 10;
@@ -84,10 +85,26 @@ var crop = {
 		});
 	},
 	resize: function(){
-		var h = parseInt($('#ipt_height').val(), 10)
-			, w = parseInt($('#ipt_width').val(), 10)
-			, hw = h /w;
+		var h = parseInt($('#ipt_h').val(), 10)
+			, w = parseInt($('#ipt_w').val(), 10)
+			, th = parseInt($('#ipt_height').val(), 10)
+			, tw = parseInt($('#ipt_width').val(), 10)
+			, hw = th / tw
+			, cw = 0
+			, ch = 0;
 		
+		if( w > h ){
+			w = w * hw;
+		} else {
+			h = h * hw;
+		}
+		cw = w * this.showScale;
+    	ch = cw * hw;
+		$('#mask').css({
+			'width': cw + 'px',
+			'height': ch + 'px'
+		});
+		$('#mask_i').html(w + ' x ' + h);
 	}
 };
 
