@@ -85,18 +85,25 @@ var crop = {
 		});
 	},
 	resize: function(){
-		var h = parseInt($('#ipt_h').val(), 10)
-			, w = parseInt($('#ipt_w').val(), 10)
-			, th = parseInt($('#ipt_height').val(), 10)
+		var w = parseInt($('#ipt_w').val(), 10)
+			, h = parseInt($('#ipt_h').val(), 10)
 			, tw = parseInt($('#ipt_width').val(), 10)
+			, th = parseInt($('#ipt_height').val(), 10)
 			, hw = th / tw
 			, cw = 0
-			, ch = 0;
+			, ch = 0
+			, nw = this.preview_pic.naturalWidth
+	    	, nh = this.preview_pic.naturalHeight;
 		
-		if( w > h ){
-			w = w * hw;
+		var rw = w * hw
+			, rh = h * hw;
+		if( rw > nw){
+			h = h * hw;			
 		} else {
-			h = h * hw;
+			w = w * hw;
+		}
+		if(rh > nh){
+			console.log('t');
 		}
 		cw = w * this.showScale;
     	ch = cw * hw;
@@ -104,6 +111,8 @@ var crop = {
 			'width': cw + 'px',
 			'height': ch + 'px'
 		});
+		$('#ipt_w').val(w);
+		$('#ipt_h').val(h)
 		$('#mask_i').html(w + ' x ' + h);
 	}
 };
