@@ -3,6 +3,9 @@ var crop = {
 		this.show_pic = $('#show_pic')[0];
 		this.preview_pic = $('#preview_pic')[0];
 		
+		this.sw = parseInt($('#ipt_width').val(), 10);
+		this.sh = parseInt($('#ipt_height').val(), 10);
+		
 		this.showInfo();
 		this.bind();
 	},
@@ -78,35 +81,49 @@ var crop = {
 			$('#ipt_h').val(h);
 		});
 		$('#ipt_width').change(function(){
-			self.resize();
+			self.resize('w');
 		});
 		$('#ipt_height').change(function(){
-			self.resize();
+			self.resize('h');
 		});
 	},
-	resize: function(){
+	resize: function(s){
 		var w = parseInt($('#ipt_w').val(), 10)
 			, h = parseInt($('#ipt_h').val(), 10)
-			, tw = parseInt($('#ipt_width').val(), 10)
-			, th = parseInt($('#ipt_height').val(), 10)
-			, hw = th / tw
-			, cw = 0
-			, ch = 0
+			, sw = parseInt($('#ipt_width').val(), 10)
+			, sh = parseInt($('#ipt_height').val(), 10)
 			, nw = this.preview_pic.naturalWidth
 	    	, nh = this.preview_pic.naturalHeight;
 		
-		var rw = w * hw
-			, rh = h * hw;
-		if( rw > nw){
-			h = h * hw;			
-		} else {
-			w = w * hw;
+		var rw, rh;
+		if(s == 'w'){			
+			if(sw > this.sw){
+				rw = w * sw / sh;
+				if(rw > nw){
+					h = h * sh / sw;
+					console.log('a');
+				} else {
+					w = w * sw / sh;
+				}
+			} else {
+				w = w * sw / sh;
+			}
+		} else {			
+			if(sh > this.sh){
+				rh = h * th / tw;
+				if(rh > nh){
+					w = w * tw / th;
+					console.log('b');
+				} else {
+					h = h * tw / th;
+				}
+			} else {
+				h = h * tw / th;
+			}
 		}
-		if(rh > nh){
-			console.log('t');
-		}
-		cw = w * this.showScale;
-    	ch = cw * hw;
+		
+		var cw = w * this.showScale
+    		, ch = cw * th / tw;
 		$('#mask').css({
 			'width': cw + 'px',
 			'height': ch + 'px'
@@ -114,6 +131,8 @@ var crop = {
 		$('#ipt_w').val(w);
 		$('#ipt_h').val(h)
 		$('#mask_i').html(w + ' x ' + h);
+		this.sw = sw;
+		this.sh = sh;
 	}
 };
 
