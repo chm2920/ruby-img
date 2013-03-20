@@ -98,32 +98,32 @@ var crop = {
 		var rw, rh;
 		if(s == 'w'){			
 			if(sw > this.sw){
-				rw = w * sw / sh;
+				rw = w * sw / this.sw;
 				if(rw > nw){
 					h = h * sh / sw;
-					console.log('a');
 				} else {
 					w = w * sw / sh;
 				}
 			} else {
-				w = w * sw / sh;
+				w = w * sw / this.sw;
 			}
 		} else {			
 			if(sh > this.sh){
-				rh = h * th / tw;
+				rh = h * sh / this.sh;
+				console.log(rh);
 				if(rh > nh){
-					w = w * tw / th;
+					w = w * sw / sh;
 					console.log('b');
 				} else {
-					h = h * tw / th;
+					h = h * sw / sh;
 				}
 			} else {
-				h = h * tw / th;
+				h = h * sh / this.sh;
 			}
 		}
 		
 		var cw = w * this.showScale
-    		, ch = cw * th / tw;
+    		, ch = cw * sh / sw;
 		$('#mask').css({
 			'width': cw + 'px',
 			'height': ch + 'px'
