@@ -102,7 +102,7 @@ var crop = {
 				if(rw > nw){
 					h = h * sh / sw;
 				} else {
-					w = w * sw / sh;
+					w = w * sw / this.sw;
 				}
 			} else {
 				w = w * sw / this.sw;
@@ -110,12 +110,10 @@ var crop = {
 		} else {			
 			if(sh > this.sh){
 				rh = h * sh / this.sh;
-				console.log(rh);
 				if(rh > nh){
 					w = w * sw / sh;
-					console.log('b');
 				} else {
-					h = h * sw / sh;
+					h = h * sh / this.sh;
 				}
 			} else {
 				h = h * sh / this.sh;
@@ -131,6 +129,10 @@ var crop = {
 		$('#ipt_w').val(w);
 		$('#ipt_h').val(h)
 		$('#mask_i').html(w + ' x ' + h);
+		if(w / h != sw / sh){
+			console.log('sw', sw);
+			console.log('sh', sh);
+		}
 		this.sw = sw;
 		this.sh = sh;
 	}
