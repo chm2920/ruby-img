@@ -11,11 +11,11 @@ var crop = {
 		this.sw = this.preview_pic.width;
 		this.sh = this.preview_pic.height;
 		
-		this.l = this.exs[0];
-		this.t = this.exs[1];
+		this.l = parseInt(this.exs[0], 10);
+		this.t = parseInt(this.exs[1], 10);
 		
-		this.cw = this.exs[2];
-		this.ch = this.exs[3];
+		this.cw = parseInt(this.exs[2], 10);
+		this.ch = parseInt(this.exs[3], 10);
 		
 		this.showScale = this.sw / this.pw;
 		
@@ -29,7 +29,7 @@ var crop = {
 		}			
 		
 		var lS = this.l * this.showScale
-			, tS = this.t * this.ShowScale
+			, tS = this.t * this.showScale
 			, cwS = this.cw * this.showScale
 			, chS = this.ch * this.showScale;
 		
@@ -78,11 +78,9 @@ var crop = {
 			$('#ipt_w').val(w);
 			$('#ipt_h').val(h);
 		});
-		$('#ipt_width').change(function(){
-			self.resize('w');
-		});
-		$('#ipt_height').change(function(){
-			self.resize('h');
+		
+		$('#ipt_width, #ipt_height').change(function(){
+			self.resize();
 		});
 		
 		function mouseCoords(ev) {
@@ -101,26 +99,49 @@ var crop = {
 		$("#mask").mousedown(function (e) {
             e.stopPropagation();
             e.preventDefault();
+            
+            var mc = mouseCoords(e)
+                , p = $("#mask").offset()
+                , l = mc.x - p.left - parseInt($('#mask').css('left'), 10)
+                , t = mc.y - p.top - parseInt($('#mask').css('top'), 10);
+                
+                console.log(p.left);
+                    
             $(document).mousemove(function (e) {
                 e.stopPropagation();
                 e.preventDefault();
-                var mc = mouseCoords(e),
-                    p = $("#mask").offset();
+                var mc = mouseCoords(e)
+                    , ml = mc.x - l - p.left
+                    , mt = mc.y - t - p.top
+                    , max_l = self.sw - parseInt($('#mask').width(), 10)
+                    , max_t = self.sh - parseInt($('#mask').height(), 10);
                 
+                if(ml < 0){
+                	ml = 0
+                }
+                if(mt < 0){
+                	mt = 0
+                }
+                
+                if(ml > max_l){
+                	ml = max_l;
+                }                
+                if(mt > max_t){
+                	mt = max_t;
+                }
                 $("#mask").css({
-                    'left': mc.x - 28 + 'px',
-                    'top': mc.y - 5 + 'px'
+                    'left': ml + 'px',
+                    'top': mt + 'px'
                 });
             });
-            $(document).mouseup(function (e) {
-                var mc = mouseCoords(e),
-                    p = $("#mask").offset();
-                
+            $(document).mouseup(function (e) {  
+            	$('#ipt_x').val(parseInt($('#mask').css('left'), 10) / self.showScale);
+            	$('#ipt_y').val(parseInt($('#mask').css('top'), 10) / self.showScale);           
                 $(document).unbind('mousemove').unbind('mouseup');
             });
         });
 	},
-	resize: function(s){
+	resize: function(){
 		var w = parseInt($('#ipt_w').val(), 10)
 			, h = parseInt($('#ipt_h').val(), 10)
 			, sw = parseInt($('#ipt_width').val(), 10)
